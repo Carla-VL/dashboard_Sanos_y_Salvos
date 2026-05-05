@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Reportes de búsqueda - Sanos y Salvos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="./assets/images/favicon_io/site.webmanifest">
+</head>
+
+<body>
+  <div id="overlay" class="overlay"></div>
+
+  <!-- TOPBAR -->
+  <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
+    <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
+
+    <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2">
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
+
+    <div>
+      <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
+
+        <!-- Notificaciones -->
+        <li>
+          <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle" data-bs-toggle="dropdown"
+            aria-expanded="false" href="#" role="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-bell">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+              2
+              <span class="visually-hidden">notificaciones nuevas</span>
+            </span>
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
+            <ul class="list-unstyled p-0 m-0">
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Nuevo reporte generado</p>
+                    <p class="mb-1">Se actualizó el resumen de mascotas perdidas.</p>
+                    <div class="text-secondary">Hace 5 minutos</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="./assets/images/avatar/avatar-4.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Caso urgente detectado</p>
+                    <p class="mb-1">Una mascota fue marcada con prioridad alta.</p>
+                    <div class="text-secondary">Hace 30 minutos</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="./assets/images/avatar/avatar-2.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Mascota encontrada</p>
+                    <p class="mb-1">Un caso fue cerrado correctamente.</p>
+                    <div class="text-secondary">Hace 1 hora</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="px-4 py-3 text-center">
+                <a href="#" class="text-primary">Ver todas las notificaciones</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Usuario -->
+        <li class="ms-3 dropdown">
+          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
+            <div>
+              <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
+                <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                <div>
+                  <h4 class="mb-0 small">Administrador</h4>
+                  <p class="mb-0 small">@sanosysalvos</p>
+                </div>
+              </div>
+
+              <div class="p-3 d-flex flex-column gap-1 small lh-lg">
+                <a href="index.html"><span>Inicio</span></a>
+                <a href="inventory.html"><span>Mascotas</span></a>
+                <a href="reports.html"><span>Reportes</span></a>
+                <a href="#!"><span>Configuración</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="logo-area">
+      <a href="index.html" class="d-inline-flex align-items-center text-decoration-none">
+        <img src="./assets/images/logo-icon.svg" alt="" width="24">
+        <span class="logo-text ms-2 fw-bold">Sanos y Salvos</span>
+      </a>
+    </div>
+
+    <ul class="nav flex-column">
+      <li class="px-4 py-2"><small class="nav-text">Principal</small></li>
+
+      <li>
+        <a class="nav-link" href="index.html">
+          <i class="ti ti-home"></i>
+          <span class="nav-text">Dashboard</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="inventory.html">
+          <i class="ti ti-paw"></i>
+          <span class="nav-text">Mascotas</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="create-product.html">
+          <i class="ti ti-plus"></i>
+          <span class="nav-text">Registrar mascota perdida</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link active" href="reports.html">
+          <i class="ti ti-receipt"></i>
+          <span class="nav-text">Reportes de búsqueda</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="404-error.html">
+          <i class="ti ti-alert-circle"></i>
+          <span class="nav-text">Error 404</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="docs.html">
+          <i class="ti ti-file-text"></i>
+          <span class="nav-text">Documentación</span>
+        </a>
+      </li>
+
+      <li class="px-4 pt-4 pb-2"><small class="nav-text">Cuenta</small></li>
+
+      <li>
+        <a class="nav-link" href="signin.html">
+          <i class="ti ti-logout"></i>
+          <span class="nav-text">Iniciar sesión</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="signup.html">
+          <i class="ti ti-user-plus"></i>
+          <span class="nav-text">Registro</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="content" class="content py-10">
+    <div class="container-fluid">
+
+      <!-- Encabezado -->
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+              <h1 class="fs-3 mb-1">Reportes de búsqueda</h1>
+              <p class="mb-0 text-secondary">
+                Resumen de mascotas perdidas, encontradas, avistamientos y zonas con mayor cantidad de reportes.
+              </p>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-secondary">
+                <i class="ti ti-file-excel me-1"></i> Exportar Excel
+              </button>
+              <button class="btn btn-primary">
+                <i class="ti ti-file-pdf me-1"></i> Generar PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards principales -->
+      <div class="row g-3 mb-3">
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-4">Mascotas encontradas</h6>
+                  <h3 class="mb-1 fw-bold">45</h3>
+                  <p class="mb-0 text-success small">
+                    <i class="ti ti-arrow-up"></i> 10% más que el mes anterior
+                  </p>
+                </div>
+                <i class="ti ti-circle-check fs-2 text-success"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-4">Casos en búsqueda</h6>
+                  <h3 class="mb-1 fw-bold">38</h3>
+                  <p class="mb-0 text-primary small">
+                    <i class="ti ti-refresh"></i> Reportes activos
+                  </p>
+                </div>
+                <i class="ti ti-search fs-2 text-primary"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-4">Casos urgentes</h6>
+                  <h3 class="mb-1 fw-bold">12</h3>
+                  <p class="mb-0 text-danger small">
+                    <i class="ti ti-alert-triangle"></i> Requieren difusión
+                  </p>
+                </div>
+                <i class="ti ti-alert-circle fs-2 text-danger"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-4">Avistamientos</h6>
+                  <h3 class="mb-1 fw-bold">26</h3>
+                  <p class="mb-0 text-info small">
+                    <i class="ti ti-map-pin"></i> Reportes de ubicación
+                  </p>
+                </div>
+                <i class="ti ti-map-pin fs-2 text-info"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Resumen visual sin ApexCharts -->
+      <div class="row g-3 mb-3">
+
+        <div class="col-12 col-lg-6">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4 gap-2">
+                <div>
+                  <h2 class="mb-1 fs-5">Resumen mensual de reportes</h2>
+                  <p class="mb-0 text-secondary small">
+                    Distribución general de los estados registrados durante el mes.
+                  </p>
+                </div>
+
+                <select class="form-select form-select-sm" style="width: auto;">
+                  <option selected>Este mes</option>
+                  <option>Esta semana</option>
+                  <option>Últimos 6 meses</option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                  <span>Encontradas</span>
+                  <span class="fw-semibold">45%</span>
+                </div>
+                <div class="progress" style="height: 9px;">
+                  <div class="progress-bar bg-success" style="width: 45%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                  <span>En búsqueda</span>
+                  <span class="fw-semibold">35%</span>
+                </div>
+                <div class="progress" style="height: 9px;">
+                  <div class="progress-bar bg-primary" style="width: 35%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                  <span>Perdidas pendientes</span>
+                  <span class="fw-semibold">12%</span>
+                </div>
+                <div class="progress" style="height: 9px;">
+                  <div class="progress-bar bg-warning" style="width: 12%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-0">
+                <div class="d-flex justify-content-between mb-1">
+                  <span>Urgentes</span>
+                  <span class="fw-semibold">8%</span>
+                </div>
+                <div class="progress" style="height: 9px;">
+                  <div class="progress-bar bg-danger" style="width: 8%;"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4 gap-2">
+                <div>
+                  <h2 class="mb-1 fs-5">Indicadores del sistema</h2>
+                  <p class="mb-0 text-secondary small">
+                    Datos generales para apoyar el seguimiento de mascotas perdidas.
+                  </p>
+                </div>
+
+                <button class="btn btn-light btn-sm">
+                  <i class="ti ti-refresh me-1"></i> Actualizar
+                </button>
+              </div>
+
+              <div class="row text-center">
+                <div class="col-6 border-end border-bottom p-4">
+                  <h3 class="fw-bold mb-1">120</h3>
+                  <small class="text-secondary">Mascotas reportadas</small>
+                </div>
+
+                <div class="col-6 border-bottom p-4">
+                  <h3 class="fw-bold mb-1">45</h3>
+                  <small class="text-secondary">Mascotas encontradas</small>
+                </div>
+
+                <div class="col-6 border-end p-4">
+                  <h3 class="fw-bold mb-1">38</h3>
+                  <small class="text-secondary">Búsquedas activas</small>
+                </div>
+
+                <div class="col-6 p-4">
+                  <h3 class="fw-bold mb-1">26</h3>
+                  <small class="text-secondary">Avistamientos</small>
+                </div>
+              </div>
+
+              <div class="alert alert-info mt-4 mb-0">
+                <strong>Importante:</strong> Los indicadores permiten visualizar el estado general sin usar librerías externas de gráficos.
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tabla de reportes -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 px-4 py-3">
+              <div>
+                <h2 class="mb-0 fs-5">Listado de reportes recientes</h2>
+                <p class="mb-0 text-secondary small">
+                  Últimos reportes de mascotas perdidas, encontradas o avistadas.
+                </p>
+              </div>
+
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar reporte..." style="max-width: 240px;">
+            </div>
+
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-nowrap">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Mascota</th>
+                      <th>Tipo</th>
+                      <th>Tutor</th>
+                      <th>Comuna</th>
+                      <th>Fecha</th>
+                      <th>Prioridad</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>Luna</td>
+                      <td>Perro</td>
+                      <td>María López</td>
+                      <td>Maipú</td>
+                      <td>05-05-2026</td>
+                      <td><span class="badge bg-warning-subtle text-warning">Media</span></td>
+                      <td><span class="badge bg-warning-subtle text-warning">Perdida</span></td>
+                    </tr>
+
+                    <tr>
+                      <td>Milo</td>
+                      <td>Gato</td>
+                      <td>Juan Pérez</td>
+                      <td>Puente Alto</td>
+                      <td>04-05-2026</td>
+                      <td><span class="badge bg-primary-subtle text-primary">Normal</span></td>
+                      <td><span class="badge bg-primary-subtle text-primary">En búsqueda</span></td>
+                    </tr>
+
+                    <tr>
+                      <td>Rocky</td>
+                      <td>Perro</td>
+                      <td>Camila Soto</td>
+                      <td>Santiago Centro</td>
+                      <td>03-05-2026</td>
+                      <td><span class="badge bg-success-subtle text-success">Baja</span></td>
+                      <td><span class="badge bg-success-subtle text-success">Encontrado</span></td>
+                    </tr>
+
+                    <tr>
+                      <td>Nala</td>
+                      <td>Perro</td>
+                      <td>Diego Herrera</td>
+                      <td>La Florida</td>
+                      <td>02-05-2026</td>
+                      <td><span class="badge bg-danger-subtle text-danger">Alta</span></td>
+                      <td><span class="badge bg-danger-subtle text-danger">Urgente</span></td>
+                    </tr>
+
+                    <tr>
+                      <td>Kira</td>
+                      <td>Perro</td>
+                      <td>Felipe Castro</td>
+                      <td>Providencia</td>
+                      <td>01-05-2026</td>
+                      <td><span class="badge bg-primary-subtle text-primary">Normal</span></td>
+                      <td><span class="badge bg-info-subtle text-info">Avistada</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Actividad por zona -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h2 class="mb-0 fs-5">Actividad por zona</h2>
+                  <p class="mb-0 text-secondary small">
+                    Comunas con mayor cantidad de reportes dentro de Sanos y Salvos.
+                  </p>
+                </div>
+              </div>
+
+              <div class="list-group list-group-flush">
+
+                <div class="list-group-item p-3 d-flex align-items-center">
+                  <div class="me-3">
+                    <div class="icon-shape icon-md bg-primary bg-opacity-10 text-primary rounded-2">
+                      <i class="ti ti-map-pin"></i>
+                    </div>
+                  </div>
+
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">Maipú</h6>
+                        <small class="text-secondary">18 reportes activos</small>
+                      </div>
+                      <div class="text-end">
+                        <strong>40%</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="list-group-item p-3 d-flex align-items-center">
+                  <div class="me-3">
+                    <div class="icon-shape icon-md bg-success bg-opacity-10 text-success rounded-2">
+                      <i class="ti ti-map-pin"></i>
+                    </div>
+                  </div>
+
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">Puente Alto</h6>
+                        <small class="text-secondary">12 reportes activos</small>
+                      </div>
+                      <div class="text-end">
+                        <strong>27%</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="list-group-item p-3 d-flex align-items-center">
+                  <div class="me-3">
+                    <div class="icon-shape icon-md bg-warning bg-opacity-10 text-warning rounded-2">
+                      <i class="ti ti-map-pin"></i>
+                    </div>
+                  </div>
+
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">La Florida</h6>
+                        <small class="text-secondary">9 reportes activos</small>
+                      </div>
+                      <div class="text-end">
+                        <strong>20%</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="list-group-item p-3 d-flex align-items-center">
+                  <div class="me-3">
+                    <div class="icon-shape icon-md bg-danger bg-opacity-10 text-danger rounded-2">
+                      <i class="ti ti-map-pin"></i>
+                    </div>
+                  </div>
+
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">Santiago Centro</h6>
+                        <small class="text-secondary">6 reportes activos</small>
+                      </div>
+                      <div class="text-end">
+                        <strong>13%</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="row">
+        <div class="col-12">
+          <footer class="text-center py-2 mt-6 text-secondary">
+            <p class="mb-0">
+              Dashboard adaptado para el proyecto Sanos y Salvos. Plantilla base distribuida por
+              <a href="https://themewagon.com/" target="_blank" class="text-primary">ThemeWagon</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="./assets/js/main.js" type="module"></script>
+
+</body>
+
+</html>

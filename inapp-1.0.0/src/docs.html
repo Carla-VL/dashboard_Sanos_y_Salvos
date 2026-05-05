@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Documentación - Sanos y Salvos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="./assets/images/favicon_io/site.webmanifest">
+</head>
+
+<body>
+  <div id="overlay" class="overlay"></div>
+
+  <!-- TOPBAR -->
+  <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
+    <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
+
+    <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2">
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
+
+    <div>
+      <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
+
+        <!-- Notificaciones -->
+        <li>
+          <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle" data-bs-toggle="dropdown"
+            aria-expanded="false" href="#" role="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-bell">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+              2
+              <span class="visually-hidden">notificaciones nuevas</span>
+            </span>
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
+            <ul class="list-unstyled p-0 m-0">
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Documentación actualizada</p>
+                    <p class="mb-1">Se agregaron instrucciones del sistema de mascotas perdidas.</p>
+                    <div class="text-secondary">Hace 5 minutos</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="./assets/images/avatar/avatar-4.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Nueva mascota reportada</p>
+                    <p class="mb-1">Se registró una mascota perdida en el sistema.</p>
+                    <div class="text-secondary">Hace 30 minutos</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="./assets/images/avatar/avatar-2.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Mascota encontrada</p>
+                    <p class="mb-1">Un caso fue cerrado correctamente.</p>
+                    <div class="text-secondary">Hace 1 hora</div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="px-4 py-3 text-center">
+                <a href="#" class="text-primary">Ver todas las notificaciones</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Usuario -->
+        <li class="ms-3 dropdown">
+          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
+            <div>
+              <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
+                <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                <div>
+                  <h4 class="mb-0 small">Administrador</h4>
+                  <p class="mb-0 small">@sanosysalvos</p>
+                </div>
+              </div>
+
+              <div class="p-3 d-flex flex-column gap-1 small lh-lg">
+                <a href="index.html"><span>Inicio</span></a>
+                <a href="inventory.html"><span>Mascotas</span></a>
+                <a href="reports.html"><span>Reportes</span></a>
+                <a href="#!"><span>Configuración</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="logo-area">
+      <a href="index.html" class="d-inline-flex align-items-center text-decoration-none">
+        <img src="./assets/images/logo-icon.svg" alt="" width="24">
+        <span class="logo-text ms-2 fw-bold">Sanos y Salvos</span>
+      </a>
+    </div>
+
+    <ul class="nav flex-column">
+      <li class="px-4 py-2"><small class="nav-text">Principal</small></li>
+
+      <li>
+        <a class="nav-link" href="index.html">
+          <i class="ti ti-home"></i>
+          <span class="nav-text">Dashboard</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="inventory.html">
+          <i class="ti ti-paw"></i>
+          <span class="nav-text">Mascotas</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="create-product.html">
+          <i class="ti ti-plus"></i>
+          <span class="nav-text">Registrar mascota perdida</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="reports.html">
+          <i class="ti ti-receipt"></i>
+          <span class="nav-text">Reportes de búsqueda</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="404-error.html">
+          <i class="ti ti-alert-circle"></i>
+          <span class="nav-text">Error 404</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link active" href="docs.html">
+          <i class="ti ti-file-text"></i>
+          <span class="nav-text">Documentación</span>
+        </a>
+      </li>
+
+      <li class="px-4 pt-4 pb-2"><small class="nav-text">Cuenta</small></li>
+
+      <li>
+        <a class="nav-link" href="signin.html">
+          <i class="ti ti-logout"></i>
+          <span class="nav-text">Iniciar sesión</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="nav-link" href="signup.html">
+          <i class="ti ti-user-plus"></i>
+          <span class="nav-text">Registro</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="content" class="content py-10">
+    <div class="container-fluid">
+
+      <!-- Encabezado -->
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+              <h1 class="fs-3 mb-1">Documentación del sistema</h1>
+              <p class="mb-0 text-secondary">
+                Guía básica de uso del dashboard Sanos y Salvos, enfocado en reportar y encontrar mascotas perdidas.
+              </p>
+            </div>
+
+            <div>
+              <a href="index.html" class="btn btn-primary">
+                <i class="ti ti-home me-1"></i> Ir al dashboard
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Introducción -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-8 col-12">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Descripción general</h2>
+              <p class="mb-3">
+                Sanos y Salvos es una maqueta de sistema orientada al registro, seguimiento y difusión de mascotas perdidas.
+                Su objetivo es ayudar a los tutores a reportar una mascota extraviada y facilitar que otros usuarios puedan
+                colaborar con avistamientos o información útil para encontrarla.
+              </p>
+              <p class="mb-0">
+                La plantilla original de ThemeWagon fue adaptada al contexto del proyecto, reemplazando los elementos de
+                inventario y ventas por módulos relacionados con mascotas reportadas, casos activos, avistamientos,
+                zonas de búsqueda y mascotas encontradas.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-12">
+          <div class="card h-100 bg-primary bg-opacity-10 border border-primary border-opacity-25">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Tecnologías usadas</h2>
+              <ul class="list-unstyled mb-0">
+                <li class="mb-2"><i class="ti ti-check text-primary me-1"></i> HTML</li>
+                <li class="mb-2"><i class="ti ti-check text-primary me-1"></i> Bootstrap 5</li>
+                <li class="mb-2"><i class="ti ti-check text-primary me-1"></i> CSS / SCSS</li>
+                <li class="mb-2"><i class="ti ti-check text-primary me-1"></i> Vite</li>
+                <li><i class="ti ti-check text-primary me-1"></i> Plantilla ThemeWagon adaptada</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Módulos principales -->
+      <div class="row g-3 mb-4">
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="icon-shape icon-md bg-primary bg-opacity-10 text-primary rounded-2 mb-3">
+                <i class="ti ti-dashboard"></i>
+              </div>
+              <h3 class="h6">Dashboard</h3>
+              <p class="small text-secondary mb-0">
+                Muestra indicadores principales como mascotas reportadas, casos activos,
+                mascotas encontradas y reportes urgentes.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="icon-shape icon-md bg-success bg-opacity-10 text-success rounded-2 mb-3">
+                <i class="ti ti-paw"></i>
+              </div>
+              <h3 class="h6">Mascotas</h3>
+              <p class="small text-secondary mb-0">
+                Permite revisar el listado de mascotas perdidas, encontradas, avistadas o en búsqueda.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="icon-shape icon-md bg-warning bg-opacity-10 text-warning rounded-2 mb-3">
+                <i class="ti ti-plus"></i>
+              </div>
+              <h3 class="h6">Registrar mascota perdida</h3>
+              <p class="small text-secondary mb-0">
+                Contiene un formulario para ingresar datos de la mascota, tutor, comuna,
+                fecha de pérdida, descripción y fotografía.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <div class="icon-shape icon-md bg-info bg-opacity-10 text-info rounded-2 mb-3">
+                <i class="ti ti-report"></i>
+              </div>
+              <h3 class="h6">Reportes de búsqueda</h3>
+              <p class="small text-secondary mb-0">
+                Presenta resúmenes de búsqueda, avistamientos, casos urgentes,
+                mascotas encontradas y actividad por comuna.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Uso del sistema -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6 col-12">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Uso básico del dashboard</h2>
+
+              <ol class="list-group list-group-numbered list-group-flush">
+                <li class="list-group-item ps-0">
+                  Ingresar al panel principal desde <strong>Dashboard</strong>.
+                </li>
+                <li class="list-group-item ps-0">
+                  Revisar los indicadores generales de mascotas reportadas, encontradas y en búsqueda.
+                </li>
+                <li class="list-group-item ps-0">
+                  Acceder a <strong>Mascotas</strong> para consultar el listado de reportes registrados.
+                </li>
+                <li class="list-group-item ps-0">
+                  Usar <strong>Registrar mascota perdida</strong> para simular el ingreso de un nuevo caso.
+                </li>
+                <li class="list-group-item ps-0">
+                  Revisar <strong>Reportes de búsqueda</strong> para analizar estados, zonas y actividad reciente.
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-12">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Instalación y ejecución</h2>
+              <p class="mb-2">
+                Para ejecutar la plantilla modificada, se debe abrir la terminal dentro de la carpeta del proyecto:
+              </p>
+
+              <pre class="bg-light border rounded p-3"><code>cd inapp-1.0.0</code></pre>
+
+              <p class="mb-2">Luego se instalan las dependencias:</p>
+
+              <pre class="bg-light border rounded p-3"><code>npm install</code></pre>
+
+              <p class="mb-2">Finalmente se inicia el servidor local:</p>
+
+              <pre class="bg-light border rounded p-3 mb-0"><code>npm run dev</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cambios realizados -->
+      <div class="row g-3 mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Cambios realizados sobre la plantilla</h2>
+
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Archivo</th>
+                      <th>Antes</th>
+                      <th>Después</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>index.html</code></td>
+                      <td>Dashboard de inventario y ventas</td>
+                      <td>Dashboard de mascotas perdidas y reportes de búsqueda</td>
+                    </tr>
+                    <tr>
+                      <td><code>inventory.html</code></td>
+                      <td>Inventario de productos</td>
+                      <td>Listado de mascotas reportadas</td>
+                    </tr>
+                    <tr>
+                      <td><code>create-product.html</code></td>
+                      <td>Formulario para agregar productos</td>
+                      <td>Formulario para registrar una mascota perdida</td>
+                    </tr>
+                    <tr>
+                      <td><code>reports.html</code></td>
+                      <td>Reportes de ventas e inventario</td>
+                      <td>Reportes de búsqueda, avistamientos y mascotas encontradas</td>
+                    </tr>
+                    <tr>
+                      <td><code>signin.html</code> / <code>signup.html</code></td>
+                      <td>Acceso genérico de la plantilla</td>
+                      <td>Inicio de sesión y registro de tutores o voluntarios</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="alert alert-info mt-4 mb-0">
+                <strong>Nota:</strong> Se eliminó el uso de ApexCharts, ya que no era una librería trabajada en clases.
+                Los gráficos fueron reemplazados por cards, tablas y barras de progreso usando Bootstrap.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estructura del proyecto -->
+      <div class="row g-3 mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Estructura del proyecto</h2>
+
+              <pre class="bg-light border rounded p-3 mb-0"><code>inapp-1.0.0/
+├── index.html              # Dashboard principal
+├── inventory.html          # Mascotas reportadas
+├── create-product.html     # Registrar mascota perdida
+├── reports.html            # Reportes de búsqueda
+├── signin.html             # Inicio de sesión
+├── signup.html             # Registro de tutor o voluntario
+├── docs.html               # Documentación
+├── 404-error.html          # Página de error
+├── assets/
+│   ├── images/             # Imágenes y avatares
+│   ├── js/                 # Archivo main.js
+│   └── scss/               # Estilos de la plantilla
+├── package.json            # Dependencias del proyecto
+└── vite.config.js          # Configuración de Vite</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="row">
+        <div class="col-12">
+          <footer class="text-center py-2 mt-6 text-secondary">
+            <p class="mb-0">
+              Dashboard adaptado para el proyecto Sanos y Salvos. Plantilla base distribuida por
+              <a href="https://themewagon.com/" target="_blank" class="text-primary">ThemeWagon</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="./assets/js/main.js" type="module"></script>
+
+</body>
+
+</html>

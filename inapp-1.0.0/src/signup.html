@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro - Sanos y Salvos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="./assets/images/favicon_io/site.webmanifest">
+</head>
+
+<body>
+
+  <div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-sm border-0" style="max-width:460px; width:100%;">
+      <div class="card-body p-5">
+
+        <div class="text-center mb-4">
+          <a href="index.html" class="mb-4 d-inline-flex align-items-center text-decoration-none">
+            <img src="./assets/images/logo-icon.svg" alt="" width="36">
+            <span class="ms-2 fw-bold fs-5 text-dark">Sanos y Salvos</span>
+          </a>
+
+          <h1 class="card-title mb-2 h5">Crear cuenta</h1>
+          <p class="text-secondary small mb-0">
+            Registra una cuenta para reportar, buscar o apoyar casos de mascotas perdidas.
+          </p>
+        </div>
+
+        <form class="needs-validation mt-3" novalidate>
+
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Nombre completo</label>
+            <input id="fullName" type="text" class="form-control" placeholder="Ej: María López" required>
+            <div class="invalid-feedback">Ingresa el nombre del usuario.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="rut" class="form-label">RUT</label>
+            <input id="rut" type="text" class="form-control" placeholder="Ej: 18.456.789-2" required>
+            <div class="invalid-feedback">Ingresa el RUT del usuario.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="phone" class="form-label">Teléfono de contacto</label>
+            <input id="phone" type="tel" class="form-control" placeholder="Ej: +56 9 1234 5678" required>
+            <div class="invalid-feedback">Ingresa un teléfono de contacto.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input id="email" type="email" class="form-control" placeholder="usuario@sanosysalvos.cl" required>
+            <div class="invalid-feedback">Ingresa un correo válido.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="userType" class="form-label">Tipo de usuario</label>
+            <select id="userType" class="form-select" required>
+              <option value="">Seleccionar tipo de usuario</option>
+              <option value="tutor">Tutor de mascota</option>
+              <option value="voluntario">Voluntario de búsqueda</option>
+              <option value="administrador">Administrador</option>
+            </select>
+            <div class="invalid-feedback">Selecciona un tipo de usuario.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="commune" class="form-label">Comuna</label>
+            <input id="commune" type="text" class="form-control" placeholder="Ej: Maipú" required>
+            <div class="invalid-feedback">Ingresa la comuna del usuario.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input id="password" type="password" class="form-control" placeholder="Crea una contraseña" required minlength="6">
+            <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+            <input id="confirmPassword" type="password" class="form-control" placeholder="Repite la contraseña" required
+              oninput="this.setCustomValidity(document.getElementById('password').value !== this.value ? 'Las contraseñas no coinciden.' : '')">
+            <div class="invalid-feedback">Las contraseñas deben coincidir.</div>
+          </div>
+
+          <div class="mb-3 form-check">
+            <input id="terms" class="form-check-input" type="checkbox" required>
+            <label class="form-check-label small" for="terms">
+              Acepto los términos de uso y la política de privacidad del sistema.
+            </label>
+            <div class="invalid-feedback">Debes aceptar antes de continuar.</div>
+          </div>
+
+          <button class="btn btn-primary w-100" type="submit">
+            Crear cuenta
+          </button>
+        </form>
+
+        <div class="text-center mt-3 small text-muted">
+          ¿Ya tienes una cuenta?
+          <a href="signin.html" class="link-primary">Iniciar sesión</a>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="index.html" class="small text-secondary">
+            Volver al dashboard
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="./assets/js/main.js" type="module"></script>
+
+</body>
+
+</html>
