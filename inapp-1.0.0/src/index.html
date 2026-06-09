@@ -14,7 +14,6 @@
 <body>
   <div id="overlay" class="overlay"></div>
 
-  <!-- TOPBAR -->
   <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
     <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
       <i class="ti ti-layout-sidebar-left-expand"></i>
@@ -27,7 +26,6 @@
     <div>
       <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
 
-        <!-- Notificaciones -->
         <li>
           <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle" data-bs-toggle="dropdown"
             aria-expanded="false" href="#" role="button">
@@ -52,7 +50,7 @@
                   <div class="flex-grow-1 small">
                     <p class="mb-0">Nuevo reporte de mascota perdida</p>
                     <p class="mb-1">Se registró una mascota perdida en Maipú.</p>
-                    <div class="text-secondary">Hace 5 minutos</div>
+                    <div class="text-secondary">Hace 5 minutes</div>
                   </div>
                 </div>
               </li>
@@ -86,7 +84,6 @@
           </div>
         </li>
 
-        <!-- Usuario -->
         <li class="ms-3 dropdown">
           <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
@@ -106,7 +103,7 @@
                 <a href="index.html"><span>Inicio</span></a>
                 <a href="inventory.html"><span>Mascotas</span></a>
                 <a href="reports.html"><span>Reportes</span></a>
-                <a href="#!"><span>Configuración</span></a>
+                <a href="#" onclick="localStorage.clear(); window.location.href='signin.html';"><span class="text-danger">Cerrar Sesión</span></a>
               </div>
             </div>
           </div>
@@ -116,7 +113,6 @@
     </div>
   </nav>
 
-  <!-- SIDEBAR -->
   <aside id="sidebar" class="sidebar">
     <div class="logo-area">
       <a href="index.html" class="d-inline-flex align-items-center text-decoration-none">
@@ -188,11 +184,9 @@
     </ul>
   </aside>
 
-  <!-- MAIN CONTENT -->
   <main id="content" class="content py-10">
     <div class="container-fluid">
 
-      <!-- Encabezado -->
       <div class="row">
         <div class="col-12">
           <div class="mb-6">
@@ -204,7 +198,6 @@
         </div>
       </div>
 
-      <!-- Cards principales -->
       <div class="row g-3 mb-3">
 
         <div class="col-lg-3 col-12">
@@ -215,7 +208,7 @@
               </div>
               <div>
                 <h2 class="mb-3 fs-6">Mascotas reportadas</h2>
-                <h3 class="fw-bold mb-0">120</h3>
+                <h3 id="card-reportadas" class="fw-bold mb-0">--</h3>
                 <p class="text-primary mb-0 small">+15 nuevos reportes este mes</p>
               </div>
             </div>
@@ -230,7 +223,7 @@
               </div>
               <div>
                 <h2 class="mb-3 fs-6">Casos activos</h2>
-                <h3 class="fw-bold mb-0">38</h3>
+                <h3 id="card-activos" class="fw-bold mb-0">--</h3>
                 <p class="text-success mb-0 small">Mascotas en búsqueda</p>
               </div>
             </div>
@@ -245,7 +238,7 @@
               </div>
               <div>
                 <h2 class="mb-3 fs-6">Mascotas encontradas</h2>
-                <h3 class="fw-bold mb-0">45</h3>
+                <h3 id="card-encontradas" class="fw-bold mb-0">--</h3>
                 <p class="text-info mb-0 small">Reportadas como encontradas</p>
               </div>
             </div>
@@ -260,7 +253,7 @@
               </div>
               <div>
                 <h2 class="mb-3 fs-6">Reportes urgentes</h2>
-                <h3 class="fw-bold mb-0">12</h3>
+                <h3 id="card-urgentes" class="fw-bold mb-0">--</h3>
                 <p class="text-warning mb-0 small">Casos con alta prioridad</p>
               </div>
             </div>
@@ -269,7 +262,6 @@
 
       </div>
 
-      <!-- Resumen secundario -->
       <div class="row g-3 mb-3">
 
         <div class="col-lg-4 col-12">
@@ -277,7 +269,7 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
                 <div>
-                  <h3 class="fw-bold h4">32</h3>
+                  <h3 id="card-cerrados" class="fw-bold h4">--</h3>
                   <span>Casos cerrados</span>
                 </div>
                 <div>
@@ -297,7 +289,7 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
                 <div>
-                  <h3 class="fw-bold h4">9</h3>
+                  <h3 id="card-pendientes" class="fw-bold h4">--</h3>
                   <span>Reportes pendientes</span>
                 </div>
                 <div>
@@ -317,7 +309,7 @@
             <div class="card-body p-4">
               <div class="d-flex justify-content-between border-bottom pb-5 mb-3">
                 <div>
-                  <h3 class="fw-bold h4">6</h3>
+                  <h3 id="card-avistamientos" class="fw-bold h4">--</h3>
                   <span>Avistamientos recientes</span>
                 </div>
                 <div>
@@ -333,8 +325,6 @@
         </div>
 
       </div>
-
-      <!-- Tablas y estados -->
       <div class="row g-3 mb-3">
 
         <div class="col-12 col-lg-6">
@@ -360,36 +350,8 @@
                       <th>Fecha</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>Luna</td>
-                      <td>Perro</td>
-                      <td>Maipú</td>
-                      <td><span class="badge bg-warning-subtle text-warning">Perdida</span></td>
-                      <td>05-05-2026</td>
-                    </tr>
-                    <tr>
-                      <td>Milo</td>
-                      <td>Gato</td>
-                      <td>Puente Alto</td>
-                      <td><span class="badge bg-primary-subtle text-primary">En búsqueda</span></td>
-                      <td>04-05-2026</td>
-                    </tr>
-                    <tr>
-                      <td>Rocky</td>
-                      <td>Perro</td>
-                      <td>Santiago Centro</td>
-                      <td><span class="badge bg-success-subtle text-success">Encontrado</span></td>
-                      <td>03-05-2026</td>
-                    </tr>
-                    <tr>
-                      <td>Nala</td>
-                      <td>Perro</td>
-                      <td>La Florida</td>
-                      <td><span class="badge bg-danger-subtle text-danger">Urgente</span></td>
-                      <td>02-05-2026</td>
-                    </tr>
-                  </tbody>
+                  <tbody id="tabla-reportes-cuerpo">
+                    </tbody>
                 </table>
               </div>
             </div>
@@ -472,10 +434,8 @@
 
       </div>
 
-      <!-- Tres cards inferiores -->
       <div class="row g-3">
 
-        <!-- Mascotas recientes -->
         <div class="col-lg-4">
           <div class="card h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
@@ -525,7 +485,6 @@
           </div>
         </div>
 
-        <!-- Zonas con más reportes -->
         <div class="col-lg-4">
           <div class="card h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
@@ -581,7 +540,6 @@
           </div>
         </div>
 
-        <!-- Actividad reciente -->
         <div class="col-lg-4">
           <div class="card h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
@@ -641,7 +599,6 @@
 
       </div>
 
-      <!-- Footer -->
       <div class="row">
         <div class="col-12">
           <footer class="text-center py-2 mt-6 text-secondary">
@@ -656,8 +613,10 @@
     </div>
   </main>
 
-  <!-- Bootstrap JS -->
   <script src="./assets/js/main.js" type="module"></script>
+  
+  <script src="./assets/js/dashboard.js" type="module"></script>
+  <script src="./assets/js/dashboard.js"></script>
 
 </body>
 
