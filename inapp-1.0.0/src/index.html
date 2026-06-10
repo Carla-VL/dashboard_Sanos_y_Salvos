@@ -359,7 +359,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+       <div class="col-12 col-lg-6">
           <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center bg-transparent px-4 py-3">
               <h3 class="h5 mb-0">Resumen de estados</h3>
@@ -376,54 +376,54 @@
               <div class="mb-4">
                 <div class="d-flex justify-content-between mb-1">
                   <span>Encontradas</span>
-                  <span class="fw-semibold">45%</span>
+                  <span id="pct-encontradas" class="fw-semibold">0%</span>
                 </div>
                 <div class="progress" style="height: 8px;">
-                  <div class="progress-bar bg-success" style="width: 45%;"></div>
+                  <div id="bar-encontradas" class="progress-bar bg-success" style="width: 0%;"></div>
                 </div>
               </div>
 
               <div class="mb-4">
                 <div class="d-flex justify-content-between mb-1">
                   <span>En búsqueda</span>
-                  <span class="fw-semibold">35%</span>
+                  <span id="pct-busqueda" class="fw-semibold">0%</span>
                 </div>
                 <div class="progress" style="height: 8px;">
-                  <div class="progress-bar bg-primary" style="width: 35%;"></div>
+                  <div id="bar-busqueda" class="progress-bar bg-primary" style="width: 0%;"></div>
                 </div>
               </div>
 
               <div class="mb-4">
                 <div class="d-flex justify-content-between mb-1">
                   <span>Pendientes</span>
-                  <span class="fw-semibold">12%</span>
+                  <span id="pct-pendientes" class="fw-semibold">0%</span>
                 </div>
                 <div class="progress" style="height: 8px;">
-                  <div class="progress-bar bg-warning" style="width: 12%;"></div>
+                  <div id="bar-pendientes" class="progress-bar bg-warning" style="width: 0%;"></div>
                 </div>
               </div>
 
               <div class="mb-4">
                 <div class="d-flex justify-content-between mb-1">
                   <span>Urgentes</span>
-                  <span class="fw-semibold">8%</span>
+                  <span id="pct-urgentes" class="fw-semibold">0%</span>
                 </div>
                 <div class="progress" style="height: 8px;">
-                  <div class="progress-bar bg-danger" style="width: 8%;"></div>
+                  <div id="bar-urgentes" class="progress-bar bg-danger" style="width: 0%;"></div>
                 </div>
               </div>
 
               <div class="row text-center border-top mt-4 pt-4">
                 <div class="col-4 border-end">
-                  <h3 class="fw-bold mb-2">120</h3>
+                  <h3 id="resumen-total" class="fw-bold mb-2">0</h3>
                   <small class="text-secondary">Mascotas</small>
                 </div>
                 <div class="col-4 border-end">
-                  <h3 class="fw-bold mb-2">38</h3>
+                  <h3 id="resumen-busquedas" class="fw-bold mb-2">0</h3>
                   <small class="text-secondary">Búsquedas</small>
                 </div>
                 <div class="col-4">
-                  <h3 class="fw-bold mb-2">45</h3>
+                  <h3 id="resumen-encontradas" class="fw-bold mb-2">0</h3>
                   <small class="text-secondary">Encontradas</small>
                 </div>
               </div>
@@ -445,7 +445,7 @@
               </button>
             </div>
 
-            <ul class="list-group list-group-flush">
+            <ul id="lista-mascotas-recientes" class="list-group list-group-flush">
               <li class="list-group-item d-flex align-items-center gap-3">
                 <img src="./assets/images/avatar/avatar-1.jpg" class="rounded-circle" width="48" alt="">
                 <div class="flex-grow-1">
@@ -549,57 +549,16 @@
               </button>
             </div>
 
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <div class="icon-shape icon-md bg-success bg-opacity-10 text-success rounded-2">
-                  <i class="ti ti-check"></i>
-                </div>
+            <ul id="lista-actividad-reciente" class="list-group list-group-flush">
+               </ul>
+          </div>
+        </div>
                 <div class="flex-grow-1">
-                  <p class="mb-1">Mascota encontrada</p>
-                  <small class="text-muted">Rocky fue marcado como encontrado.</small>
-                </div>
-                <span class="badge bg-success-subtle text-success">Encontrado</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <div class="icon-shape icon-md bg-primary bg-opacity-10 text-primary rounded-2">
-                  <i class="ti ti-refresh"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <p class="mb-1">Búsqueda actualizada</p>
-                  <small class="text-muted">Milo continúa en búsqueda.</small>
-                </div>
-                <span class="badge bg-primary-subtle text-primary">Búsqueda</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <div class="icon-shape icon-md bg-warning bg-opacity-10 text-warning rounded-2">
-                  <i class="ti ti-alert-triangle"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <p class="mb-1">Reporte pendiente</p>
-                  <small class="text-muted">Luna requiere actualización de zona.</small>
-                </div>
-                <span class="badge bg-warning-subtle text-warning">Pendiente</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <div class="icon-shape icon-md bg-danger bg-opacity-10 text-danger rounded-2">
-                  <i class="ti ti-alert-circle"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <p class="mb-1">Caso urgente</p>
-                  <small class="text-muted">Nala fue marcada como prioridad alta.</small>
-                </div>
-                <span class="badge bg-danger-subtle text-danger">Urgente</span>
-              </li>
-            </ul>
+                  </ul>
           </div>
         </div>
 
-      </div>
-
-      <div class="row">
+      </div> <div class="row">
         <div class="col-12">
           <footer class="text-center py-2 mt-6 text-secondary">
             <p class="mb-0">
@@ -614,10 +573,7 @@
   </main>
 
   <script src="./assets/js/main.js" type="module"></script>
-  
   <script src="./assets/js/dashboard.js" type="module"></script>
-  <script src="./assets/js/dashboard.js"></script>
 
 </body>
-
 </html>
