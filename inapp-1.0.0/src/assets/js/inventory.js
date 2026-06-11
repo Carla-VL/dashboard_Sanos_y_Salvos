@@ -1,5 +1,6 @@
 const API_BASE_URL = 'http://localhost:8085/api/bff';
 let modalBootstrap;
+let idMascotaAEliminar = null; // Variable para recordar qué mascota borrar
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
@@ -22,6 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Aviso de Formulario:', e.message);
     }
 
+    // Escuchador para el botón de confirmar eliminación en el Modal Rojo
+    const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
+    if (btnConfirmarEliminar) {
+        btnConfirmarEliminar.addEventListener('click', async () => {
+            if (idMascotaAEliminar) {
+                await ejecutarEliminacionEnBackend(idMascotaAEliminar);
+            }
+        });
+    }
+
     cargarMetricasSuperores();
     cargarTablaInventarioReal();
 });
@@ -41,13 +52,13 @@ async function cargarMetricasSuperores() {
     }
 }
 
-
 function procesarDatosMascota(pet) {
     const id = pet.id || 0;
     const nombre = pet.nombre || 'Sin nombre';
     const nameUpper = nombre.toUpperCase().trim();
     const raza = pet.raza || 'Mestizo';
     const color = pet.color || 'No especificado';
+    const foto = pet.foto || null; // 📸 Rescatamos la foto de la BD
     
     let especie = pet.especie || 'No especificado';
     if (especie !== 'No especificado') {
@@ -57,7 +68,6 @@ function procesarDatosMascota(pet) {
     let estado = pet.estadoReporte || pet.estado_reporte || pet.estado || 'REGISTRO NORMAL';
     let ubicacion = pet.ubicacion || 'No registrada';
 
-  
     if (estado === 'REGISTRO NORMAL' || !estado || estado === 'NULL') {
         if (['MILOJ', 'DUKI', 'DUKI2'].includes(nameUpper)) estado = 'ALERTA: MASCOTA PERDIDA';
         else if (nameUpper === 'ALFRED' || nameUpper === 'FIRULA') estado = 'EN REFUGIO: MASCOTA ENCONTRADA';
@@ -77,9 +87,8 @@ function procesarDatosMascota(pet) {
     if (estado.includes('PERDIDA')) badgeClass = 'bg-danger text-white fw-bold';
     if (estado.includes('ENCONTRADA')) badgeClass = 'bg-success text-white';
 
-    return { id, nombre, especie, raza, color, ubicacion, estado, badgeClass };
+    return { id, nombre, especie, raza, color, foto, ubicacion, estado, badgeClass };
 }
-
 
 async function cargarTablaInventarioReal() {
     try {
@@ -102,12 +111,15 @@ async function cargarTablaInventarioReal() {
             const fechaMock = '09-06-2026';
             const avatarNum = (index % 8) + 1;
 
+            // 📸 Lógica para usar la foto en Base64 o el avatar de repuesto
+            const imagenSrc = data.foto ? data.foto : `./assets/images/avatar/avatar-${avatarNum}.jpg`;
+
             tabla.innerHTML += `
                 <tr class="align-middle">
                     <td>
                         <a href="#" class="d-flex align-items-center text-decoration-none">
-                            <img src="./assets/images/avatar/avatar-${avatarNum}.jpg" alt="" class="avatar avatar-md rounded-circle" />
-                            <span class="ms-3"><strong>${data.nombre}</strong></span>
+                            <img src="${imagenSrc}" alt="${data.nombre}" class="avatar avatar-md rounded-circle border" style="object-fit: cover; aspect-ratio: 1/1;" />
+                            <span class="ms-3 text-dark"><strong>${data.nombre}</strong></span>
                         </a>
                     </td>
                     <td>${data.especie}</td>
@@ -136,7 +148,6 @@ async function cargarTablaInventarioReal() {
     }
 }
 
-
 window.abrirModalEditarAdmin = function(id, nombre, especie, ubicacion, estado) {
     if (document.getElementById('edit-id')) document.getElementById('edit-id').value = id;
     if (document.getElementById('edit-nombre')) document.getElementById('edit-nombre').value = nombre;
@@ -144,7 +155,6 @@ window.abrirModalEditarAdmin = function(id, nombre, especie, ubicacion, estado) 
     if (document.getElementById('edit-ubicacion')) document.getElementById('edit-ubicacion').value = ubicacion;
     if (document.getElementById('edit-estado')) document.getElementById('edit-estado').value = estado;
     
-   
     try {
         if (!modalBootstrap && typeof bootstrap !== 'undefined') {
             modalBootstrap = new bootstrap.Modal(document.getElementById('modalEditarMascota'));
@@ -155,7 +165,6 @@ window.abrirModalEditarAdmin = function(id, nombre, especie, ubicacion, estado) 
         alert(`[Modo Seguro Admin] Editando a ${nombre}.`);
     }
 };
-
 
 async function guardarCambiosMascota(e) {
     e.preventDefault();
@@ -180,10 +189,7 @@ async function guardarCambiosMascota(e) {
             if (modalBootstrap) modalBootstrap.hide();
             location.reload();
         } else {
-
             const errorTexto = await response.text();
-            
-         
             alert(`🚨 DIAGNÓSTICO EN VIVO (Status ${response.status}):\n${errorTexto}`);
         }
     } catch (error) {
@@ -192,21 +198,35 @@ async function guardarCambiosMascota(e) {
     }
 }
 
-window.eliminarMascotaAdmin = async function(id) {
-    if (confirm('¿estás seguro de que deseas eliminar permanentemente esta mascota del sistema?')) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/mascotas/eliminar/${id}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
-                alert('Mascota dada de baja de MySQL de forma exitosa.');
-                location.reload();
-            } else {
-                alert('No se pudo procesar la baja del registro.');
-            }
-        } catch (error) {
-            console.error('Error al eliminar:', error);
+// 🚨 Nueva lógica de eliminación usando el Modal de Bootstrap
+window.eliminarMascotaAdmin = function(id) {
+    idMascotaAEliminar = id; // Guardamos el ID en la memoria
+    
+    const modalElement = document.getElementById('deleteModal');
+    if (modalElement && typeof bootstrap !== 'undefined') {
+        const modalEliminar = new bootstrap.Modal(modalElement);
+        modalEliminar.show();
+    } else {
+        // Modo seguro si Bootstrap falla
+        if (confirm('¿Estás seguro de que deseas eliminar permanentemente esta mascota del sistema?')) {
+            ejecutarEliminacionEnBackend(id);
         }
     }
-
 };
+
+// Función que realmente pega al backend para borrar
+async function ejecutarEliminacionEnBackend(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/mascotas/eliminar/${id}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            alert('Mascota dada de baja de MySQL de forma exitosa.');
+            location.reload();
+        } else {
+            alert('No se pudo procesar la baja del registro.');
+        }
+    } catch (error) {
+        console.error('Error al eliminar:', error);
+    }
+}

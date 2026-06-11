@@ -32,13 +32,11 @@ async function obtenerMetricasDelBff() {
         if(document.getElementById('pct-pendientes')) document.getElementById('pct-pendientes').innerText = `${pctPendientes}%`;
         if(document.getElementById('pct-urgentes')) document.getElementById('pct-urgentes').innerText = `${pctUrgentes}%`;
 
-    
         if(document.getElementById('bar-encontradas')) document.getElementById('bar-encontradas').style.width = `${pctEncontradas}%`;
         if(document.getElementById('bar-busqueda')) document.getElementById('bar-busqueda').style.width = `${pctBusqueda}%`;
         if(document.getElementById('bar-pendientes')) document.getElementById('bar-pendientes').style.width = `${pctPendientes}%`;
         if(document.getElementById('bar-urgentes')) document.getElementById('bar-urgentes').style.width = `${pctUrgentes}%`;
 
-   
         if(document.getElementById('resumen-total')) document.getElementById('resumen-total').innerText = total;
         if(document.getElementById('resumen-busquedas')) document.getElementById('resumen-busquedas').innerText = metrics.casosActivos;
         if(document.getElementById('resumen-encontradas')) document.getElementById('resumen-encontradas').innerText = metrics.mascotasEncontradas;
@@ -53,11 +51,11 @@ function procesarDatosMascota(pet) {
     const nombre = pet.nombre || 'Sin nombre';
     const nameUpper = nombre.toUpperCase().trim();
     const especie = pet.especie || 'No especificado';
+    const foto = pet.foto || null; // 📸 Agregamos la recuperación de la foto
     
     let estado = pet.estadoReporte || pet.estado_reporte || pet.estado || 'REGISTRO NORMAL';
     let ubicacion = pet.ubicacion || 'No registrada';
 
-   
     if (estado === 'REGISTRO NORMAL' || !estado) {
         if (['MILOJ', 'DUKI', 'DUKI2'].includes(nameUpper)) {
             estado = 'ALERTA: MASCOTA PERDIDA';
@@ -79,14 +77,13 @@ function procesarDatosMascota(pet) {
     if (estado.includes('PERDIDA')) badgeColor = 'danger fw-bold';
     if (estado.includes('ENCONTRADA')) badgeColor = 'success';
 
-    return { nombre, especie, ubicacion, estado, badgeColor };
+    return { nombre, especie, ubicacion, estado, badgeColor, foto }; // 📸 Pasamos la foto en el objeto
 }
 
 async function obtenerUltimosCasosDelBff() {
     try {
         const response = await fetch(`${API_BASE_URL}/mascotas/ultimos`);
         const reportes = await response.json();
-        
         
         const tabla = document.getElementById('tabla-reportes-cuerpo');
         if (tabla) {
@@ -107,17 +104,20 @@ async function obtenerUltimosCasosDelBff() {
             });
         }
 
-       
         const listaRecientes = document.getElementById('lista-mascotas-recientes');
         if (listaRecientes) {
             listaRecientes.innerHTML = '';
-           
-            reportes.slice(0, 4).forEach(pet => {
+            
+            reportes.slice(0, 4).forEach((pet, index) => {
                 const data = procesarDatosMascota(pet);
+                
+                // 📸 Lógica de la imagen: usa Base64 o el avatar por defecto
+                const avatarFallback = `./assets/images/avatar/avatar-${(index % 8) + 1}.jpg`;
+                const imagenSrc = data.foto ? data.foto : avatarFallback;
 
                 listaRecientes.innerHTML += `
                     <li class="list-group-item d-flex align-items-center gap-3">
-                        <img src="./assets/images/avatar/avatar-1.jpg" class="rounded-circle" width="48" alt="">
+                        <img src="${imagenSrc}" class="rounded-circle border" width="48" height="48" style="object-fit: cover;" alt="Foto de ${data.nombre}">
                         <div class="flex-grow-1">
                             <p class="mb-1"><strong>${data.nombre}</strong></p>
                             <small class="text-muted">${data.especie} en ${data.ubicacion}</small>
@@ -128,7 +128,6 @@ async function obtenerUltimosCasosDelBff() {
             });
         }
 
-       
         const listaActividad = document.getElementById('lista-actividad-reciente');
         if (listaActividad) {
             listaActividad.innerHTML = '';

@@ -575,5 +575,36 @@
   <script src="./assets/js/main.js" type="module"></script>
   <script src="./assets/js/dashboard.js" type="module"></script>
 
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Vamos a golpear la puerta del BFF
+    fetch('http://localhost:8085/api/bff/dashboard/resumen')
+        .then(response => {
+            if (!response.ok) throw new Error("Error conectando al BFF");
+            return response.json();
+        })
+        .then(datos => {
+            console.log("¡Datos recibidos del servidor!", datos);
+          
+            
+            if (document.getElementById('num-reportadas')) {
+                document.getElementById('num-reportadas').innerText = datos.mascotasReportadas;
+            }
+            if (document.getElementById('num-activos')) {
+                document.getElementById('num-activos').innerText = datos.casosActivos;
+            }
+            if (document.getElementById('num-encontradas')) {
+                document.getElementById('num-encontradas').innerText = datos.mascotasEncontradas;
+            }
+            if (document.getElementById('num-urgentes')) {
+                document.getElementById('num-urgentes').innerText = datos.reportesUrgentes;
+            }
+            if (document.getElementById('num-avistamientos')) {
+                document.getElementById('num-avistamientos').innerText = datos.avistamientosRecientes;
+            }
+        })
+        .catch(error => console.error("Houston, tenemos un problema:", error));
+});
+</script>
 </body>
 </html>
