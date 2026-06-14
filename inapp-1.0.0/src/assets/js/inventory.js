@@ -1,6 +1,7 @@
 const API_BASE_URL = 'http://localhost:8085/api/bff';
 let modalBootstrap;
 let idMascotaAEliminar = null; // Variable para recordar qué mascota borrar
+let mascotasActuales = []; // 🧠 MEMORIA GLOBAL: Aquí guardaremos la lista completa
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
@@ -95,6 +96,9 @@ async function cargarTablaInventarioReal() {
         const response = await fetch(`${API_BASE_URL}/mascotas/ultimos`);
         const reportes = await response.json();
         
+        // 🧠 Guardamos TODOS los datos originales en la memoria antes de dibujar la tabla
+        mascotasActuales = reportes;
+        
         const tabla = document.getElementById('tabla-inventario-cuerpo');
         if (!tabla) return;
         tabla.innerHTML = ''; 
@@ -130,7 +134,7 @@ async function cargarTablaInventarioReal() {
                     <td><span class="badge ${data.badgeClass}">${data.estado}</span></td>
                     <td>
                         <button class="btn btn-sm btn-light text-primary border me-1" 
-                                onclick="window.abrirModalEditarAdmin(${idReal}, '${data.nombre}', '${data.especie}', '${data.ubicacion}', '${data.estado}')" 
+                                onclick="window.abrirModalEditarAdmin(${idReal})" 
                                 title="Editar Caso">
                             ✏️
                         </button>
@@ -148,21 +152,31 @@ async function cargarTablaInventarioReal() {
     }
 }
 
-window.abrirModalEditarAdmin = function(id, nombre, especie, ubicacion, estado) {
+// 🛠️ ACTUALIZADO: Solo recibe el ID y busca el resto en la memoria global
+window.abrirModalEditarAdmin = function(id) {
+    const petOriginal = mascotasActuales.find(p => p.id == id);
+    if (!petOriginal) return;
+
+    const data = procesarDatosMascota(petOriginal);
+
     if (document.getElementById('edit-id')) document.getElementById('edit-id').value = id;
-    if (document.getElementById('edit-nombre')) document.getElementById('edit-nombre').value = nombre;
-    if (document.getElementById('edit-especie')) document.getElementById('edit-especie').value = especie;
-    if (document.getElementById('edit-ubicacion')) document.getElementById('edit-ubicacion').value = ubicacion;
-    if (document.getElementById('edit-estado')) document.getElementById('edit-estado').value = estado;
+    if (document.getElementById('edit-nombre')) document.getElementById('edit-nombre').value = data.nombre;
+    if (document.getElementById('edit-especie')) document.getElementById('edit-especie').value = data.especie;
+    if (document.getElementById('edit-ubicacion')) document.getElementById('edit-ubicacion').value = data.ubicacion;
+    if (document.getElementById('edit-estado')) document.getElementById('edit-estado').value = data.estado;
+    
+    // Si tienes estos inputs en tu HTML, los llenamos. Si no, no pasa nada.
+    if (document.getElementById('edit-raza')) document.getElementById('edit-raza').value = petOriginal.raza || '';
+    if (document.getElementById('edit-color')) document.getElementById('edit-color').value = petOriginal.color || '';
     
     try {
         if (!modalBootstrap && typeof bootstrap !== 'undefined') {
             modalBootstrap = new bootstrap.Modal(document.getElementById('modalEditarMascota'));
         }
         if (modalBootstrap) modalBootstrap.show();
-        else alert(`[Corte Admin] Editando a ${nombre} (ID: ${id}). Bootstrap flotante no cargado, pero acción interceptada.`);
+        else alert(`[Corte Admin] Editando a ${data.nombre} (ID: ${id}). Bootstrap flotante no cargado, pero acción interceptada.`);
     } catch(e) {
-        alert(`[Modo Seguro Admin] Editando a ${nombre}.`);
+        alert(`[Modo Seguro Admin] Editando a ${data.nombre}.`);
     }
 };
 
@@ -170,11 +184,19 @@ async function guardarCambiosMascota(e) {
     e.preventDefault();
     const id = document.getElementById('edit-id').value;
     
+    // 🧠 Buscamos los datos originales antes de enviar la actualización
+    const petOriginal = mascotasActuales.find(p => p.id == id) || {};
+    
     const datosModificados = {
         nombre: document.getElementById('edit-nombre').value,
         especie: document.getElementById('edit-especie').value,
         ubicacion: document.getElementById('edit-ubicacion').value,
-        estadoReporte: document.getElementById('edit-estado').value
+        estadoReporte: document.getElementById('edit-estado').value,
+        
+        // 🛡️ MODO BLINDADO: Si el formulario NO tiene los campos, usa lo que había en la Base de Datos.
+        raza: (document.getElementById('edit-raza') && document.getElementById('edit-raza').value) ? document.getElementById('edit-raza').value : petOriginal.raza,
+        color: (document.getElementById('edit-color') && document.getElementById('edit-color').value) ? document.getElementById('edit-color').value : petOriginal.color,
+        foto: (document.getElementById('edit-foto') && document.getElementById('edit-foto').value) ? document.getElementById('edit-foto').value : petOriginal.foto 
     };
 
     try {
@@ -198,7 +220,7 @@ async function guardarCambiosMascota(e) {
     }
 }
 
-// 🚨 Nueva lógica de eliminación usando el Modal de Bootstrap
+// 🚨 Lógica de eliminación usando el Modal de Bootstrap
 window.eliminarMascotaAdmin = function(id) {
     idMascotaAEliminar = id; // Guardamos el ID en la memoria
     
