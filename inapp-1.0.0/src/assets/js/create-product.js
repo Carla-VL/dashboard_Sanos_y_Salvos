@@ -1,27 +1,112 @@
 const API_BASE_URL = 'http://localhost:8085/api/bff';
 
+
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+
 document.addEventListener('DOMContentLoaded', () => {
     const formulario = document.getElementById('lostPetForm');
+
+    inicializarBuscadorDireccion();
+
     if (formulario) {
         formulario.addEventListener('submit', registrarMascotaEnBaseDeDatos);
     }
 });
 
+function inicializarBuscadorDireccion() {
+    const inputDireccion = document.getElementById('commune');
+    const contenedorSugerencias = document.getElementById('addressSuggestions');
+
+    if (!inputDireccion || !contenedorSugerencias) return;
+
+    let temporizadorBusqueda;
+
+    inputDireccion.addEventListener('input', () => {
+        const texto = inputDireccion.value.trim();
+
+        clearTimeout(temporizadorBusqueda);
+
+        if (texto.length < 3) {
+            contenedorSugerencias.innerHTML = '';
+            contenedorSugerencias.style.display = 'none';
+            return;
+        }
+
+        temporizadorBusqueda = setTimeout(() => {
+            buscarDirecciones(texto, contenedorSugerencias, inputDireccion);
+        }, 400);
+    });
+
+    document.addEventListener('click', (evento) => {
+        if (
+            !inputDireccion.contains(evento.target) &&
+            !contenedorSugerencias.contains(evento.target)
+        ) {
+            contenedorSugerencias.style.display = 'none';
+        }
+    });
+}
+
+async function buscarDirecciones(texto, contenedorSugerencias, inputDireccion) {
+    try {
+        if (!MAPBOX_TOKEN || MAPBOX_TOKEN === '') {
+            console.warn('Falta configurar el token de Mapbox.');
+            return;
+        }
+
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+            texto
+        )}.json?access_token=${MAPBOX_TOKEN}&country=cl&language=es&limit=5`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        contenedorSugerencias.innerHTML = '';
+
+        if (!data.features || data.features.length === 0) {
+            contenedorSugerencias.style.display = 'none';
+            return;
+        }
+
+        data.features.forEach((lugar) => {
+            const boton = document.createElement('button');
+
+            boton.type = 'button';
+            boton.className = 'list-group-item list-group-item-action';
+            boton.textContent = lugar.place_name;
+
+            boton.addEventListener('click', () => {
+                inputDireccion.value = lugar.place_name;
+                contenedorSugerencias.innerHTML = '';
+                contenedorSugerencias.style.display = 'none';
+            });
+
+            contenedorSugerencias.appendChild(boton);
+        });
+
+        contenedorSugerencias.style.display = 'block';
+    } catch (error) {
+        console.error('Error buscando direcciones:', error);
+        contenedorSugerencias.style.display = 'none';
+    }
+}
+
 async function registrarMascotaEnBaseDeDatos(e) {
     e.preventDefault(); 
 
-  
     const nombreInput = document.getElementById('petName').value;
     const tipoSelect = document.getElementById('petType').value;
     const razaInput = document.getElementById('breed').value || 'Mestizo';
     const colorInput = document.getElementById('color').value || 'No especificado';
     const edadInput = parseInt(document.getElementById('age').value) || 0;
     const contactoInput = document.getElementById('phone').value || 'Sin teléfono';
+
+    // Se mantiene el mismo id "commune", pero ahora viene desde el input de dirección.
     const comunaSelect = document.getElementById('commune').value;
+
     const estadoSelect = document.getElementById('status').value;
     const descripcionInput = document.getElementById('description').value || 'Sin descripción';
 
-   
     const fotoFile = document.getElementById('petPhoto').files[0];
     let fotoBase64 = ""; 
 
@@ -29,17 +114,16 @@ async function registrarMascotaEnBaseDeDatos(e) {
         fotoBase64 = await convertirImagenABase64(fotoFile);
     }
 
-    
     const especieFormateada = tipoSelect.charAt(0).toUpperCase() + tipoSelect.slice(1);
 
     let estadoRealMySQL = "REGISTRO NORMAL";
+
     if (estadoSelect === 'perdida' || estadoSelect === 'busqueda') {
         estadoRealMySQL = "ALERTA: MASCOTA PERDIDA";
     } else if (estadoSelect === 'encontrada') {
         estadoRealMySQL = "EN REFUGIO: MASCOTA ENCONTRADA";
     }
 
-    
     const nuevaMascotaPayload = {
         nombre: nombreInput,
         especie: especieFormateada,
@@ -79,11 +163,12 @@ async function registrarMascotaEnBaseDeDatos(e) {
     }
 }
 
-
 function convertirImagenABase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
+
         reader.readAsDataURL(file);
+
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
     });
