@@ -13,6 +13,7 @@ export default defineConfig({
     port: 3000,
     hot: true,
     open: true,
+
   },
   css: {
     preprocessorOptions: {
