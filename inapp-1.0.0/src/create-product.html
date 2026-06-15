@@ -171,14 +171,13 @@
       </li>
 
       <li class="px-4 pt-4 pb-2"><small class="nav-text">Cuenta</small></li>
-      
+
       <li>
         <a class="nav-link" href="http://localhost:5173">
           <i class="ti ti-arrow-left"></i>
           <span class="nav-text">Volver a Sanos y Salvos</span>
         </a>
       </li>
-
     </ul>
   </aside>
 
@@ -230,7 +229,7 @@
               </div>
               <div>
                 <h2 class="mb-2 fs-6">Última ubicación</h2>
-                <p class="mb-0 small text-success">Indica comuna y sector donde se perdió.</p>
+                <p class="mb-0 small text-success">Indica la dirección o sector donde se perdió.</p>
               </div>
             </div>
           </div>
@@ -314,8 +313,8 @@
                     <input type="date" class="form-control" id="lostDate" required>
                   </div>
 
+                  <!-- CAMBIO: antes era Comuna, ahora es buscador de dirección -->
                   <div class="col-md-4 mb-3 position-relative">
-
                     <label for="commune" class="form-label">Dirección o ubicación</label>
 
                     <input
@@ -332,7 +331,6 @@
                       class="list-group position-absolute w-100 shadow-sm"
                       style="z-index: 9999; display: none; max-height: 220px; overflow-y: auto;"
                     ></div>
-
                   </div>
 
                   <div class="col-md-4 mb-3">
@@ -383,9 +381,11 @@
                   <button type="submit" class="btn btn-primary">
                     <i class="ti ti-device-floppy me-1"></i> Guardar reporte
                   </button>
+
                   <button type="reset" class="btn btn-secondary">
                     <i class="ti ti-eraser me-1"></i> Limpiar
                   </button>
+
                   <a href="index.html" class="btn btn-outline-secondary">
                     Cancelar
                   </a>
@@ -424,12 +424,7 @@
 
   <!-- Bootstrap JS -->
   <script src="./assets/js/main.js" type="module"></script>
-  
   <script src="./assets/js/create-product.js" type="module"></script>
 
 </body>
-</html>
-
-</body>
-
 </html>

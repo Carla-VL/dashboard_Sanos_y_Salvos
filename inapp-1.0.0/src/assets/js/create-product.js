@@ -1,7 +1,8 @@
 const API_BASE_URL = 'http://localhost:8085/api/bff';
 
-
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+
+console.log("Token Mapbox cargado:", MAPBOX_TOKEN ? "Sí llegó" : "No llegó");
 
 document.addEventListener('DOMContentLoaded', () => {
     const formulario = document.getElementById('lostPetForm');
@@ -17,6 +18,9 @@ function inicializarBuscadorDireccion() {
     const inputDireccion = document.getElementById('commune');
     const contenedorSugerencias = document.getElementById('addressSuggestions');
 
+    console.log("Input dirección:", inputDireccion ? "Existe" : "No existe");
+    console.log("Contenedor sugerencias:", contenedorSugerencias ? "Existe" : "No existe");
+
     if (!inputDireccion || !contenedorSugerencias) return;
 
     let temporizadorBusqueda;
@@ -31,6 +35,13 @@ function inicializarBuscadorDireccion() {
             contenedorSugerencias.style.display = 'none';
             return;
         }
+
+        contenedorSugerencias.innerHTML = `
+            <div class="list-group-item text-muted">
+                Buscando direcciones...
+            </div>
+        `;
+        contenedorSugerencias.style.display = 'block';
 
         temporizadorBusqueda = setTimeout(() => {
             buscarDirecciones(texto, contenedorSugerencias, inputDireccion);
@@ -51,20 +62,46 @@ async function buscarDirecciones(texto, contenedorSugerencias, inputDireccion) {
     try {
         if (!MAPBOX_TOKEN || MAPBOX_TOKEN === '') {
             console.warn('Falta configurar el token de Mapbox.');
+
+            contenedorSugerencias.innerHTML = `
+                <div class="list-group-item text-danger">
+                    Falta configurar el token de Mapbox.
+                </div>
+            `;
+            contenedorSugerencias.style.display = 'block';
             return;
         }
 
         const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
             texto
-        )}.json?access_token=${MAPBOX_TOKEN}&country=cl&language=es&limit=5`;
+        )}.json?access_token=${MAPBOX_TOKEN}&country=cl&language=es&limit=5&types=address,place,locality,neighborhood,poi`;
+
+        console.log("Buscando en Mapbox:", texto);
 
         const response = await fetch(url);
         const data = await response.json();
 
+        console.log("Respuesta Mapbox:", data);
+
         contenedorSugerencias.innerHTML = '';
 
+        if (!response.ok) {
+            contenedorSugerencias.innerHTML = `
+                <div class="list-group-item text-danger">
+                    Mapbox rechazó la consulta. Revisa el token.
+                </div>
+            `;
+            contenedorSugerencias.style.display = 'block';
+            return;
+        }
+
         if (!data.features || data.features.length === 0) {
-            contenedorSugerencias.style.display = 'none';
+            contenedorSugerencias.innerHTML = `
+                <div class="list-group-item text-muted">
+                    No se encontraron direcciones para "${texto}".
+                </div>
+            `;
+            contenedorSugerencias.style.display = 'block';
             return;
         }
 
@@ -87,7 +124,13 @@ async function buscarDirecciones(texto, contenedorSugerencias, inputDireccion) {
         contenedorSugerencias.style.display = 'block';
     } catch (error) {
         console.error('Error buscando direcciones:', error);
-        contenedorSugerencias.style.display = 'none';
+
+        contenedorSugerencias.innerHTML = `
+            <div class="list-group-item text-danger">
+                Error de conexión con Mapbox.
+            </div>
+        `;
+        contenedorSugerencias.style.display = 'block';
     }
 }
 
@@ -100,10 +143,7 @@ async function registrarMascotaEnBaseDeDatos(e) {
     const colorInput = document.getElementById('color').value || 'No especificado';
     const edadInput = parseInt(document.getElementById('age').value) || 0;
     const contactoInput = document.getElementById('phone').value || 'Sin teléfono';
-
-    // Se mantiene el mismo id "commune", pero ahora viene desde el input de dirección.
     const comunaSelect = document.getElementById('commune').value;
-
     const estadoSelect = document.getElementById('status').value;
     const descripcionInput = document.getElementById('description').value || 'Sin descripción';
 
