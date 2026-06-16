@@ -9,6 +9,37 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon_io/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon_io/favicon-16x16.png">
   <link rel="manifest" href="./assets/images/favicon_io/site.webmanifest">
+
+  <style>
+    .avatar-blue {
+      background: #dff1ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .avatar-blue svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .avatar-orange-border {
+      border: 2px solid #ff6243;
+      padding: 2px;
+      box-sizing: border-box;
+    }
+
+    .badge-admin {
+      background-color: #ff6243;
+    }
+
+    #menu-perfil-lucas a:hover {
+      background-color: #f8f9fa;
+    }
+  </style>
 </head>
 
 <body>
@@ -80,25 +111,64 @@
           </div>
         </li>
 
-        <li class="ms-3 dropdown">
-          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+        <!-- Perfil Lucas -->
+        <li class="ms-3 position-relative">
+          <a href="#" id="btn-perfil-lucas" role="button" class="text-decoration-none">
+            <span class="avatar avatar-sm rounded-circle avatar-blue avatar-orange-border"
+              style="width: 40px; height: 40px;">
+              <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="48" cy="48" r="48" fill="#dff1ff" />
+                <circle cx="48" cy="35" r="16" fill="#3a7ca5" />
+                <path d="M20 84c4-20 18-31 28-31s24 11 28 31" fill="#3a7ca5" />
+                <path d="M35 56l13 24 13-24" fill="#ffffff" />
+                <path d="M42 60l6 9 6-9" fill="#ff6243" />
+              </svg>
+            </span>
           </a>
-          <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
-            <div>
-              <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-                <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
-                <div>
-                  <h4 class="mb-0 small">Administrador</h4>
-                  <p class="mb-0 small">@sanosysalvos</p>
-                </div>
+
+          <div id="menu-perfil-lucas"
+            class="shadow"
+            style="display: none; position: absolute; right: 0; top: 50px; background: white; border-radius: 8px; min-width: 220px; z-index: 9999; border: 1px solid #eee;">
+
+            <div class="d-flex gap-3 align-items-center border-bottom px-3 py-3 bg-light"
+              style="border-radius: 8px 8px 0 0;">
+              <span class="avatar avatar-md rounded-circle avatar-blue" style="width: 50px; height: 50px;">
+                <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="48" cy="48" r="48" fill="#dff1ff" />
+                  <circle cx="48" cy="35" r="16" fill="#3a7ca5" />
+                  <path d="M20 84c4-20 18-31 28-31s24 11 28 31" fill="#3a7ca5" />
+                  <path d="M35 56l13 24 13-24" fill="#ffffff" />
+                  <path d="M42 60l6 9 6-9" fill="#ff6243" />
+                </svg>
+              </span>
+
+              <div>
+                <h4 class="mb-0 fs-6 fw-bold text-dark">Lucas</h4>
+                <span class="badge rounded-pill badge-admin mt-1">Administrador</span>
               </div>
-              <div class="p-3 d-flex flex-column gap-1 small lh-lg">
-                <a href="index.html"><span>Inicio</span></a>
-                <a href="inventory.html"><span>Mascotas</span></a>
-                <a href="reports.html"><span>Reportes</span></a>
-                <a href="#!"><span>Configuración</span></a>
-              </div>
+            </div>
+
+            <div class="p-2 d-flex flex-column gap-1 small">
+              <a href="perfil.html"
+                class="text-decoration-none rounded px-3 py-2 text-dark d-flex align-items-center gap-2">
+                <i class="ti ti-user fs-5 text-secondary"></i>
+                <span>Mi Perfil</span>
+              </a>
+
+              <a href="docs.html"
+                class="text-decoration-none rounded px-3 py-2 text-dark d-flex align-items-center gap-2">
+                <i class="ti ti-settings fs-5 text-secondary"></i>
+                <span>Configuración</span>
+              </a>
+
+              <hr class="my-1" style="border-color: #eee;">
+
+              <a href="http://localhost:5173"
+                onclick="event.preventDefault(); localStorage.clear(); window.location.href='http://localhost:5173';"
+                class="text-decoration-none rounded px-3 py-2 text-danger d-flex align-items-center gap-2">
+                <i class="ti ti-logout fs-5"></i>
+                <span>Cerrar Sesión</span>
+              </a>
             </div>
           </div>
         </li>
@@ -474,6 +544,40 @@
 
   <script src="./assets/js/main.js" type="module"></script>
   <script src="./assets/js/reports.js" type="module"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const btnPerfil = document.getElementById('btn-perfil-lucas');
+      const menuPerfil = document.getElementById('menu-perfil-lucas');
+
+      if (!btnPerfil || !menuPerfil) return;
+
+      btnPerfil.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (menuPerfil.style.display === 'none' || menuPerfil.style.display === '') {
+          menuPerfil.style.display = 'block';
+        } else {
+          menuPerfil.style.display = 'none';
+        }
+      });
+
+      menuPerfil.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+
+      document.addEventListener('click', function () {
+        menuPerfil.style.display = 'none';
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          menuPerfil.style.display = 'none';
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>

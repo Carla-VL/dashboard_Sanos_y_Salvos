@@ -9,6 +9,33 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon_io/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon_io/favicon-16x16.png">
   <link rel="manifest" href="./assets/images/favicon_io/site.webmanifest">
+
+  <style>
+    .avatar-blue {
+      background: #dff1ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .avatar-blue svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .avatar-orange-border {
+      border: 2px solid #ff6243;
+      padding: 2px;
+      box-sizing: border-box;
+    }
+
+    .badge-admin {
+      background-color: #ff6243;
+    }
+  </style>
 </head>
 
 <body>
@@ -86,28 +113,56 @@
           </div>
         </li>
 
-        <!-- Usuario -->
+        <!-- Usuario corregido con icono azul -->
         <li class="ms-3 dropdown">
-          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" class="text-decoration-none">
+            <span class="avatar avatar-sm rounded-circle avatar-blue avatar-orange-border">
+              <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="48" cy="48" r="48" fill="#dff1ff" />
+                <circle cx="48" cy="35" r="16" fill="#3a7ca5" />
+                <path d="M20 84c4-20 18-31 28-31s24 11 28 31" fill="#3a7ca5" />
+                <path d="M35 56l13 24 13-24" fill="#ffffff" />
+                <path d="M42 60l6 9 6-9" fill="#ff6243" />
+              </svg>
+            </span>
           </a>
 
-          <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
-            <div>
-              <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-                <img src="./assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
-                <div>
-                  <h4 class="mb-0 small">Administrador</h4>
-                  <p class="mb-0 small">@sanosysalvos</p>
-                </div>
-              </div>
+          <div class="dropdown-menu dropdown-menu-end p-0 shadow border-0" style="min-width: 220px; border-radius: 8px;">
 
-              <div class="p-3 d-flex flex-column gap-1 small lh-lg">
-                <a href="index.html"><span>Inicio</span></a>
-                <a href="inventory.html"><span>Mascotas</span></a>
-                <a href="reports.html"><span>Reportes</span></a>
-                <a href="#!"><span>Configuración</span></a>
+            <div class="d-flex gap-3 align-items-center px-3 py-3 border-bottom bg-light">
+              <span class="avatar avatar-md rounded-circle avatar-blue">
+                <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="48" cy="48" r="48" fill="#dff1ff" />
+                  <circle cx="48" cy="35" r="16" fill="#3a7ca5" />
+                  <path d="M20 84c4-20 18-31 28-31s24 11 28 31" fill="#3a7ca5" />
+                  <path d="M35 56l13 24 13-24" fill="#ffffff" />
+                  <path d="M42 60l6 9 6-9" fill="#ff6243" />
+                </svg>
+              </span>
+
+              <div>
+                <h6 class="mb-1 fw-semibold">Lucas</h6>
+                <span class="badge rounded-pill badge-admin">Administrador</span>
               </div>
+            </div>
+
+            <div class="py-2">
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#!">
+                <i class="ti ti-user fs-5"></i>
+                <span>Mi Perfil</span>
+              </a>
+
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#!">
+                <i class="ti ti-settings fs-5"></i>
+                <span>Configuración</span>
+              </a>
+
+              <div class="dropdown-divider my-2"></div>
+
+              <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="http://localhost:5173">
+                <i class="ti ti-logout fs-5"></i>
+                <span>Cerrar Sesión</span>
+              </a>
             </div>
           </div>
         </li>
@@ -313,7 +368,6 @@
                     <input type="date" class="form-control" id="lostDate" required>
                   </div>
 
-                  <!-- CAMBIO: antes era Comuna, ahora es buscador de dirección -->
                   <div class="col-md-4 mb-3 position-relative">
                     <label for="commune" class="form-label">Dirección o ubicación</label>
 
