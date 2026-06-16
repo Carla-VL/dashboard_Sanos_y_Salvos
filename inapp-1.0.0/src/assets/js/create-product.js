@@ -135,7 +135,7 @@ async function buscarDirecciones(texto, contenedorSugerencias, inputDireccion) {
 }
 
 async function registrarMascotaEnBaseDeDatos(e) {
-    e.preventDefault(); 
+    e.preventDefault();
 
     const nombreInput = document.getElementById('petName').value;
     const tipoSelect = document.getElementById('petType').value;
@@ -147,11 +147,20 @@ async function registrarMascotaEnBaseDeDatos(e) {
     const estadoSelect = document.getElementById('status').value;
     const descripcionInput = document.getElementById('description').value || 'Sin descripción';
 
-    const fotoFile = document.getElementById('petPhoto').files[0];
-    let fotoBase64 = ""; 
+    const fotoInput = document.getElementById('petPhoto');
+    const fotoFile = fotoInput && fotoInput.files ? fotoInput.files[0] : null;
+
+    let fotoBase64 = "";
 
     if (fotoFile) {
-        fotoBase64 = await convertirImagenABase64(fotoFile);
+        try {
+            fotoBase64 = await comprimirImagenABase64(fotoFile, 650, 0.5);
+            console.log("Foto comprimida. Tamaño aproximado en caracteres:", fotoBase64.length);
+        } catch (error) {
+            console.error("Error al comprimir la imagen:", error);
+            alert("No se pudo procesar la foto. Intenta con otra imagen.");
+            return;
+        }
     }
 
     const especieFormateada = tipoSelect.charAt(0).toUpperCase() + tipoSelect.slice(1);
@@ -171,11 +180,11 @@ async function registrarMascotaEnBaseDeDatos(e) {
         color: colorInput,
         edad: edadInput,
         contacto: contactoInput,
-        ubicacion: comunaSelect, 
+        ubicacion: comunaSelect,
         estadoReporte: estadoRealMySQL,
         descripcion: descripcionInput,
         reproductivo: "No especificado",
-        foto: fotoBase64 
+        foto: fotoBase64
     };
 
     console.log("🚀 [Admin] Enviando configuración a MySQL a través del BFF:", nuevaMascotaPayload);
@@ -190,11 +199,11 @@ async function registrarMascotaEnBaseDeDatos(e) {
         });
 
         if (response.ok) {
-            alert(`¡Excelente máquina! ${nombreInput} ha sido insertado correctamente con su foto en la base de datos.`);
-            window.location.href = 'inventory.html'; 
+            alert(`¡Excelente! ${nombreInput} ha sido insertado correctamente con su foto en la base de datos.`);
+            window.location.href = 'inventory.html';
         } else {
             const errBody = await response.text();
-            console.error(" Rechazo interno del microservicio:", errBody);
+            console.error("Rechazo interno del microservicio:", errBody);
             alert('Error operativo: El backend rechazó la estructura de datos. Revisa la consola.');
         }
     } catch (error) {
@@ -203,13 +212,46 @@ async function registrarMascotaEnBaseDeDatos(e) {
     }
 }
 
-function convertirImagenABase64(file) {
+function comprimirImagenABase64(file, maxAncho = 650, calidad = 0.5) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.readAsDataURL(file);
+        reader.onload = function (evento) {
+            const imagen = new Image();
 
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+            imagen.onload = function () {
+                const canvas = document.createElement('canvas');
+
+                let ancho = imagen.width;
+                let alto = imagen.height;
+
+                if (ancho > maxAncho) {
+                    alto = Math.round((alto * maxAncho) / ancho);
+                    ancho = maxAncho;
+                }
+
+                canvas.width = ancho;
+                canvas.height = alto;
+
+                const contexto = canvas.getContext('2d');
+                contexto.drawImage(imagen, 0, 0, ancho, alto);
+
+                const imagenComprimida = canvas.toDataURL('image/jpeg', calidad);
+
+                resolve(imagenComprimida);
+            };
+
+            imagen.onerror = function () {
+                reject(new Error("No se pudo cargar la imagen."));
+            };
+
+            imagen.src = evento.target.result;
+        };
+
+        reader.onerror = function () {
+            reject(new Error("No se pudo leer el archivo."));
+        };
+
+        reader.readAsDataURL(file);
     });
 }
