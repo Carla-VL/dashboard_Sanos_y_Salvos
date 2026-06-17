@@ -196,7 +196,7 @@ async function cargarTablaInventarioReal() {
     }
 }
 
-// 🛠️ ACTUALIZADO: Solo recibe el ID y busca el resto en la memoria global
+// 🛠️ ACTUALIZADO: Lee correctamente los IDs del modal HTML nuevo
 window.abrirModalEditarAdmin = function (id) {
     const petOriginal = mascotasActuales.find(p => p.id == id);
     if (!petOriginal) return;
@@ -211,25 +211,33 @@ window.abrirModalEditarAdmin = function (id) {
         document.getElementById('edit-nombre').value = data.nombre;
     }
 
-    if (document.getElementById('edit-especie')) {
-        document.getElementById('edit-especie').value = data.especie;
+    // MATCH: En el HTML le pusimos edit-tipo
+    if (document.getElementById('edit-tipo')) {
+        document.getElementById('edit-tipo').value = data.especie;
     }
 
-    if (document.getElementById('edit-ubicacion')) {
-        document.getElementById('edit-ubicacion').value = data.ubicacion;
+    // MATCH: Combina Raza y Color
+    if (document.getElementById('edit-raza')) {
+        let razaColor = petOriginal.raza || '';
+        if (petOriginal.color && petOriginal.color !== 'No especificado') {
+            razaColor += ' / ' + petOriginal.color;
+        }
+        document.getElementById('edit-raza').value = razaColor;
     }
 
     if (document.getElementById('edit-estado')) {
-        document.getElementById('edit-estado').value = data.estado;
-    }
-
-    // Si tienes estos inputs en tu HTML, los llenamos. Si no, no pasa nada.
-    if (document.getElementById('edit-raza')) {
-        document.getElementById('edit-raza').value = petOriginal.raza || '';
-    }
-
-    if (document.getElementById('edit-color')) {
-        document.getElementById('edit-color').value = petOriginal.color || '';
+        const estadoSelect = document.getElementById('edit-estado');
+        const estadoVal = data.estado.toUpperCase();
+        
+        let found = false;
+        for(let i=0; i<estadoSelect.options.length; i++) {
+            if(estadoSelect.options[i].value === estadoVal) {
+                estadoSelect.selectedIndex = i;
+                found = true;
+                break;
+            }
+        }
+        if(!found) document.getElementById('edit-estado').value = "REGISTRO NORMAL";
     }
 
     try {
@@ -255,24 +263,29 @@ async function guardarCambiosMascota(e) {
     // 🧠 Buscamos los datos originales antes de enviar la actualización
     const petOriginal = mascotasActuales.find(p => p.id == id) || {};
 
+    const nombreInput = document.getElementById('edit-nombre');
+    const tipoInput = document.getElementById('edit-tipo');
+    const razaInput = document.getElementById('edit-raza');
+    const estadoInput = document.getElementById('edit-estado');
+
+    // Parseamos la raza y color si el usuario escribió con la barrita "/"
+    let razaFinal = petOriginal.raza;
+    let colorFinal = petOriginal.color;
+    
+    if (razaInput && razaInput.value) {
+        const partes = razaInput.value.split('/');
+        razaFinal = partes[0] ? partes[0].trim() : petOriginal.raza;
+        if(partes[1]) colorFinal = partes[1].trim();
+    }
+
     const datosModificados = {
-        nombre: document.getElementById('edit-nombre').value,
-        especie: document.getElementById('edit-especie').value,
-        ubicacion: document.getElementById('edit-ubicacion').value,
-        estadoReporte: document.getElementById('edit-estado').value,
-
-        // 🛡️ MODO BLINDADO: Si el formulario NO tiene los campos, usa lo que había en la Base de Datos.
-        raza: (document.getElementById('edit-raza') && document.getElementById('edit-raza').value)
-            ? document.getElementById('edit-raza').value
-            : petOriginal.raza,
-
-        color: (document.getElementById('edit-color') && document.getElementById('edit-color').value)
-            ? document.getElementById('edit-color').value
-            : petOriginal.color,
-
-        foto: (document.getElementById('edit-foto') && document.getElementById('edit-foto').value)
-            ? document.getElementById('edit-foto').value
-            : petOriginal.foto
+        nombre: nombreInput ? nombreInput.value : petOriginal.nombre,
+        especie: tipoInput ? tipoInput.value : petOriginal.especie,
+        ubicacion: petOriginal.ubicacion, // Se mantiene el original porque no está en el modal
+        estadoReporte: estadoInput ? estadoInput.value : petOriginal.estadoReporte,
+        raza: razaFinal,
+        color: colorFinal,
+        foto: petOriginal.foto // Se mantiene la original
     };
 
     try {

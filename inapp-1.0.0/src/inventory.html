@@ -58,7 +58,6 @@
     <div>
       <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
 
-        <!-- Notificaciones -->
         <li>
           <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle"
             data-bs-toggle="dropdown"
@@ -82,7 +81,6 @@
           </a>
         </li>
 
-        <!-- Perfil Lucas -->
         <li class="ms-3 position-relative">
           <a href="#" id="btn-perfil-lucas" role="button" class="text-decoration-none">
             <span class="avatar avatar-sm rounded-circle avatar-blue avatar-orange-border"
@@ -304,7 +302,6 @@
         </div>
       </div>
 
-      <!-- Tabla -->
       <div class="row">
         <div class="col-12">
           <div class="d-flex gap-2 mb-3 flex-wrap justify-content-between">
@@ -383,39 +380,69 @@
     </div>
   </main>
 
-  <!-- Modal editar -->
   <div class="modal fade" id="modalEditarMascota" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Editar</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">Editar Mascota</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body">
-          <form id="formEditarMascota">...</form>
+          <form id="formEditarMascota">
+            <input type="hidden" id="edit-id">
+            
+            <div class="mb-3">
+              <label for="edit-nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="edit-nombre" placeholder="Ej: Fido" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="edit-tipo" class="form-label">Tipo</label>
+              <input type="text" class="form-control" id="edit-tipo" placeholder="Ej: Perro" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="edit-raza" class="form-label">Raza / Color</label>
+              <input type="text" class="form-control" id="edit-raza" placeholder="Ej: Mestizo / Negro">
+            </div>
+
+            <div class="mb-3">
+              <label for="edit-estado" class="form-label">Estado</label>
+              <select class="form-select" id="edit-estado">
+                <option value="ALERTA: MASCOTA PERDIDA">Alerta: Mascota Perdida</option>
+                <option value="EN REFUGIO: MASCOTA ENCONTRADA">En Refugio: Mascota Encontrada</option>
+                <option value="REGISTRO NORMAL">Registro Normal</option>
+              </select>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+              <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+          </form>
         </div>
 
       </div>
     </div>
   </div>
 
-  <!-- Modal eliminar -->
   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
         <div class="modal-header bg-danger text-white">
           <h5 class="modal-title">Eliminar</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body">
-          ¿Estás seguro?
+          ¿Estás seguro de que quieres eliminar esta mascota del registro?
         </div>
 
         <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
           <button class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
         </div>
 
