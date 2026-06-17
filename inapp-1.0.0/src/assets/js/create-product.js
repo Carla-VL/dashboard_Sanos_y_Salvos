@@ -190,7 +190,7 @@ async function registrarMascotaEnBaseDeDatos(e) {
     console.log("🚀 [Admin] Enviando configuración a MySQL a través del BFF:", nuevaMascotaPayload);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/mascotas/crear-admin`, {
+        const response = await fetch(`${API_BASE_URL}/mascotas/reportar?tipo=perdida`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
