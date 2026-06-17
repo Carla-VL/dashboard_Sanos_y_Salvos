@@ -38,16 +38,42 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarTablaInventarioReal();
 });
 
+/*
+  IMPORTANTE:
+  El BFF pide el header "rol" para editar y eliminar.
+  El controller acepta ADMIN o VETERINARIO.
+*/
+function obtenerRolParaBackend() {
+    const rolGuardado = localStorage.getItem('rol') || 'ADMIN';
+
+    if (rolGuardado.toUpperCase() === 'ADMINISTRADOR') {
+        return 'ADMIN';
+    }
+
+    return rolGuardado.toUpperCase();
+}
+
 async function cargarMetricasSuperores() {
     try {
         const response = await fetch(`${API_BASE_URL}/dashboard/resumen`);
         if (!response.ok) throw new Error('Error al conectar con las métricas');
         const metrics = await response.json();
-        
-        if(document.getElementById('card-total')) document.getElementById('card-total').innerText = metrics.mascotasReportadas;
-        if(document.getElementById('card-encontradas')) document.getElementById('card-encontradas').innerText = metrics.mascotasEncontradas;
-        if(document.getElementById('card-busqueda')) document.getElementById('card-busqueda').innerText = metrics.casosActivos;
-        if(document.getElementById('card-urgentes')) document.getElementById('card-urgentes').innerText = metrics.reportesUrgentes;
+
+        if (document.getElementById('card-total')) {
+            document.getElementById('card-total').innerText = metrics.mascotasReportadas;
+        }
+
+        if (document.getElementById('card-encontradas')) {
+            document.getElementById('card-encontradas').innerText = metrics.mascotasEncontradas;
+        }
+
+        if (document.getElementById('card-busqueda')) {
+            document.getElementById('card-busqueda').innerText = metrics.casosActivos;
+        }
+
+        if (document.getElementById('card-urgentes')) {
+            document.getElementById('card-urgentes').innerText = metrics.reportesUrgentes;
+        }
     } catch (error) {
         console.error('Error al mapear métricas superiores:', error);
     }
@@ -60,33 +86,50 @@ function procesarDatosMascota(pet) {
     const raza = pet.raza || 'Mestizo';
     const color = pet.color || 'No especificado';
     const foto = pet.foto || null; // 📸 Rescatamos la foto de la BD
-    
+
     let especie = pet.especie || 'No especificado';
     if (especie !== 'No especificado') {
         especie = especie.charAt(0).toUpperCase() + especie.slice(1).toLowerCase();
     }
-    
+
     let estado = pet.estadoReporte || pet.estado_reporte || pet.estado || 'REGISTRO NORMAL';
     let ubicacion = pet.ubicacion || 'No registrada';
 
     if (estado === 'REGISTRO NORMAL' || !estado || estado === 'NULL') {
-        if (['MILOJ', 'DUKI', 'DUKI2'].includes(nameUpper)) estado = 'ALERTA: MASCOTA PERDIDA';
-        else if (nameUpper === 'ALFRED' || nameUpper === 'FIRULA') estado = 'EN REFUGIO: MASCOTA ENCONTRADA';
-        else estado = 'REGISTRO NORMAL';
-    }
-    
-    if (ubicacion === 'No registrada' || !ubicacion || ubicacion === 'NULL') {
-        if (nameUpper === 'MILOJ' || nameUpper === 'DUKI2') ubicacion = 'Maipú';
-        else if (nameUpper === 'DOCKER') ubicacion = 'Santiago Centro';
-        else if (nameUpper === 'ALFRED') ubicacion = 'La Florida';
-        else if (nameUpper === 'DUKI') ubicacion = 'Estación Central';
-        else if (nameUpper === 'FIRULA') ubicacion = 'San Bernardo';
-        else ubicacion = 'Puente Alto';
+        if (['MILOJ', 'DUKI', 'DUKI2'].includes(nameUpper)) {
+            estado = 'ALERTA: MASCOTA PERDIDA';
+        } else if (nameUpper === 'ALFRED' || nameUpper === 'FIRULA') {
+            estado = 'EN REFUGIO: MASCOTA ENCONTRADA';
+        } else {
+            estado = 'REGISTRO NORMAL';
+        }
     }
 
-    let badgeClass = 'bg-primary-subtle text-primary'; 
-    if (estado.includes('PERDIDA')) badgeClass = 'bg-danger text-white fw-bold';
-    if (estado.includes('ENCONTRADA')) badgeClass = 'bg-success text-white';
+    if (ubicacion === 'No registrada' || !ubicacion || ubicacion === 'NULL') {
+        if (nameUpper === 'MILOJ' || nameUpper === 'DUKI2') {
+            ubicacion = 'Maipú';
+        } else if (nameUpper === 'DOCKER') {
+            ubicacion = 'Santiago Centro';
+        } else if (nameUpper === 'ALFRED') {
+            ubicacion = 'La Florida';
+        } else if (nameUpper === 'DUKI') {
+            ubicacion = 'Estación Central';
+        } else if (nameUpper === 'FIRULA') {
+            ubicacion = 'San Bernardo';
+        } else {
+            ubicacion = 'Puente Alto';
+        }
+    }
+
+    let badgeClass = 'bg-primary-subtle text-primary';
+
+    if (estado.includes('PERDIDA')) {
+        badgeClass = 'bg-danger text-white fw-bold';
+    }
+
+    if (estado.includes('ENCONTRADA')) {
+        badgeClass = 'bg-success text-white';
+    }
 
     return { id, nombre, especie, raza, color, foto, ubicacion, estado, badgeClass };
 }
@@ -95,13 +138,14 @@ async function cargarTablaInventarioReal() {
     try {
         const response = await fetch(`${API_BASE_URL}/mascotas/ultimos`);
         const reportes = await response.json();
-        
+
         // 🧠 Guardamos TODOS los datos originales en la memoria antes de dibujar la tabla
         mascotasActuales = reportes;
-        
+
         const tabla = document.getElementById('tabla-inventario-cuerpo');
         if (!tabla) return;
-        tabla.innerHTML = ''; 
+
+        tabla.innerHTML = '';
 
         if (!Array.isArray(reportes)) {
             console.error("La respuesta del BFF no es un arreglo válido.");
@@ -153,56 +197,91 @@ async function cargarTablaInventarioReal() {
 }
 
 // 🛠️ ACTUALIZADO: Solo recibe el ID y busca el resto en la memoria global
-window.abrirModalEditarAdmin = function(id) {
+window.abrirModalEditarAdmin = function (id) {
     const petOriginal = mascotasActuales.find(p => p.id == id);
     if (!petOriginal) return;
 
     const data = procesarDatosMascota(petOriginal);
 
-    if (document.getElementById('edit-id')) document.getElementById('edit-id').value = id;
-    if (document.getElementById('edit-nombre')) document.getElementById('edit-nombre').value = data.nombre;
-    if (document.getElementById('edit-especie')) document.getElementById('edit-especie').value = data.especie;
-    if (document.getElementById('edit-ubicacion')) document.getElementById('edit-ubicacion').value = data.ubicacion;
-    if (document.getElementById('edit-estado')) document.getElementById('edit-estado').value = data.estado;
-    
+    if (document.getElementById('edit-id')) {
+        document.getElementById('edit-id').value = id;
+    }
+
+    if (document.getElementById('edit-nombre')) {
+        document.getElementById('edit-nombre').value = data.nombre;
+    }
+
+    if (document.getElementById('edit-especie')) {
+        document.getElementById('edit-especie').value = data.especie;
+    }
+
+    if (document.getElementById('edit-ubicacion')) {
+        document.getElementById('edit-ubicacion').value = data.ubicacion;
+    }
+
+    if (document.getElementById('edit-estado')) {
+        document.getElementById('edit-estado').value = data.estado;
+    }
+
     // Si tienes estos inputs en tu HTML, los llenamos. Si no, no pasa nada.
-    if (document.getElementById('edit-raza')) document.getElementById('edit-raza').value = petOriginal.raza || '';
-    if (document.getElementById('edit-color')) document.getElementById('edit-color').value = petOriginal.color || '';
-    
+    if (document.getElementById('edit-raza')) {
+        document.getElementById('edit-raza').value = petOriginal.raza || '';
+    }
+
+    if (document.getElementById('edit-color')) {
+        document.getElementById('edit-color').value = petOriginal.color || '';
+    }
+
     try {
         if (!modalBootstrap && typeof bootstrap !== 'undefined') {
             modalBootstrap = new bootstrap.Modal(document.getElementById('modalEditarMascota'));
         }
-        if (modalBootstrap) modalBootstrap.show();
-        else alert(`[Corte Admin] Editando a ${data.nombre} (ID: ${id}). Bootstrap flotante no cargado, pero acción interceptada.`);
-    } catch(e) {
+
+        if (modalBootstrap) {
+            modalBootstrap.show();
+        } else {
+            alert(`[Corte Admin] Editando a ${data.nombre} (ID: ${id}). Bootstrap flotante no cargado, pero acción interceptada.`);
+        }
+    } catch (e) {
         alert(`[Modo Seguro Admin] Editando a ${data.nombre}.`);
     }
 };
 
 async function guardarCambiosMascota(e) {
     e.preventDefault();
+
     const id = document.getElementById('edit-id').value;
-    
+
     // 🧠 Buscamos los datos originales antes de enviar la actualización
     const petOriginal = mascotasActuales.find(p => p.id == id) || {};
-    
+
     const datosModificados = {
         nombre: document.getElementById('edit-nombre').value,
         especie: document.getElementById('edit-especie').value,
         ubicacion: document.getElementById('edit-ubicacion').value,
         estadoReporte: document.getElementById('edit-estado').value,
-        
+
         // 🛡️ MODO BLINDADO: Si el formulario NO tiene los campos, usa lo que había en la Base de Datos.
-        raza: (document.getElementById('edit-raza') && document.getElementById('edit-raza').value) ? document.getElementById('edit-raza').value : petOriginal.raza,
-        color: (document.getElementById('edit-color') && document.getElementById('edit-color').value) ? document.getElementById('edit-color').value : petOriginal.color,
-        foto: (document.getElementById('edit-foto') && document.getElementById('edit-foto').value) ? document.getElementById('edit-foto').value : petOriginal.foto 
+        raza: (document.getElementById('edit-raza') && document.getElementById('edit-raza').value)
+            ? document.getElementById('edit-raza').value
+            : petOriginal.raza,
+
+        color: (document.getElementById('edit-color') && document.getElementById('edit-color').value)
+            ? document.getElementById('edit-color').value
+            : petOriginal.color,
+
+        foto: (document.getElementById('edit-foto') && document.getElementById('edit-foto').value)
+            ? document.getElementById('edit-foto').value
+            : petOriginal.foto
     };
 
     try {
         const response = await fetch(`${API_BASE_URL}/mascotas/actualizar/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'rol': obtenerRolParaBackend()
+            },
             body: JSON.stringify(datosModificados)
         });
 
@@ -221,9 +300,9 @@ async function guardarCambiosMascota(e) {
 }
 
 // 🚨 Lógica de eliminación usando el Modal de Bootstrap
-window.eliminarMascotaAdmin = function(id) {
+window.eliminarMascotaAdmin = function (id) {
     idMascotaAEliminar = id; // Guardamos el ID en la memoria
-    
+
     const modalElement = document.getElementById('deleteModal');
     if (modalElement && typeof bootstrap !== 'undefined') {
         const modalEliminar = new bootstrap.Modal(modalElement);
@@ -240,15 +319,22 @@ window.eliminarMascotaAdmin = function(id) {
 async function ejecutarEliminacionEnBackend(id) {
     try {
         const response = await fetch(`${API_BASE_URL}/mascotas/eliminar/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'rol': obtenerRolParaBackend()
+            }
         });
+
         if (response.ok) {
             alert('Mascota dada de baja de MySQL de forma exitosa.');
             location.reload();
         } else {
-            alert('No se pudo procesar la baja del registro.');
+            const errorTexto = await response.text();
+            console.error('Error al eliminar:', response.status, errorTexto);
+            alert(`No se pudo procesar la baja del registro.\nStatus: ${response.status}\n${errorTexto}`);
         }
     } catch (error) {
         console.error('Error al eliminar:', error);
+        alert('Error de red al intentar eliminar la mascota.');
     }
 }
