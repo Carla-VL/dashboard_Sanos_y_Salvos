@@ -1,0 +1,4 @@
+[build]
+  base = "inapp-1.0.0"
+  command = "npm run build"
+  publish = "dist"
