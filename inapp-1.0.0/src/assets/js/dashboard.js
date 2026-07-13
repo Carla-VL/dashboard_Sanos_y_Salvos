@@ -1,9 +1,44 @@
 const API_BASE_URL = 'http://localhost:8085/api/bff';
 
-document.addEventListener('DOMContentLoaded', () => {
-    obtenerMetricasDelBff();
-    obtenerUltimosCasosDelBff();
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    /*
+     * Esperamos que terminen las dos consultas principales.
+     * allSettled permite continuar aunque una de las consultas falle.
+     */
+    await Promise.allSettled([
+      obtenerMetricasDelBff(),
+      obtenerUltimosCasosDelBff(),
+    ]);
+  } catch (error) {
+    console.error('Error durante la carga inicial del dashboard:', error);
+  } finally {
+    finalizarCargaDashboard();
+  }
 });
+
+/**
+ * Oculta la pantalla de carga y muestra el dashboard.
+ */
+function finalizarCargaDashboard() {
+  const loader = document.getElementById('dashboard-loader');
+
+  /*
+   * Primero mostramos el dashboard debajo del loader.
+   * Como el loader tiene fondo sólido, todavía no se alcanza a ver.
+   */
+  document.body.classList.remove('dashboard-cargando');
+
+  if (!loader) {
+    return;
+  }
+
+  loader.classList.add('loader-saliendo');
+
+  setTimeout(() => {
+    loader.remove();
+  }, 350);
+}
 
 async function obtenerMetricasDelBff() {
     try {

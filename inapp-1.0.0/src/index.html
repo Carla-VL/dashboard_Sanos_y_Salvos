@@ -35,10 +35,115 @@
     .badge-admin {
       background-color: #ff6243;
     }
-  </style>
+
+    /* ============================
+      PANTALLA DE CARGA
+    ============================ */
+
+    body.dashboard-cargando {
+      overflow: hidden;
+    }
+
+    /* Oculta el dashboard mientras se cargan los datos */
+    body.dashboard-cargando > *:not(#dashboard-loader) {
+      visibility: hidden;
+    }
+
+    #dashboard-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background-color: #f8f9fa;
+      opacity: 1;
+
+      transition: opacity 0.35s ease;
+    }
+
+    #dashboard-loader.loader-saliendo {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-contenido {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .loader-icono {
+      width: 76px;
+      height: 76px;
+      margin-bottom: 22px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+      background-color: #fff0ec;
+      color: #ff6243;
+      font-size: 36px;
+    }
+
+    .loader-spinner {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 20px;
+
+      border: 4px solid #e5e7eb;
+      border-top-color: #ff6243;
+      border-radius: 50%;
+
+      animation: girar-loader 0.8s linear infinite;
+    }
+
+    .loader-titulo {
+      margin: 0 0 8px;
+      color: #1f2937;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .loader-texto {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    @keyframes girar-loader {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+      </style>
 </head>
 
-<body>
+<body class="dashboard-cargando">
+  <div id="dashboard-loader" role="status" aria-live="polite">
+    <div class="loader-contenido">
+
+      <div class="loader-icono">
+        🐾
+      </div>
+
+      <div class="loader-spinner"></div>
+
+      <h1 class="loader-titulo">Sanos y Salvos</h1>
+
+      <p class="loader-texto">
+        Cargando panel de administración...
+      </p>
+
+    </div>
+  </div>
+
   <div id="overlay" class="overlay"></div>
 
   <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
@@ -497,41 +602,6 @@
             </div>
 
             <ul id="lista-mascotas-recientes" class="list-group list-group-flush">
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="./assets/images/avatar/avatar-1.jpg" class="rounded-circle" width="48" alt="">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Luna</p>
-                  <small class="text-muted">Perra perdida en Maipú</small>
-                </div>
-                <span class="badge bg-warning-subtle text-warning">Perdida</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="./assets/images/avatar/avatar-2.jpg" class="rounded-circle" width="48" alt="">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Milo</p>
-                  <small class="text-muted">Gato en búsqueda</small>
-                </div>
-                <span class="badge bg-primary-subtle text-primary">Búsqueda</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="./assets/images/avatar/avatar-3.jpg" class="rounded-circle" width="48" alt="">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Rocky</p>
-                  <small class="text-muted">Mascota encontrada</small>
-                </div>
-                <span class="badge bg-success-subtle text-success">Encontrado</span>
-              </li>
-
-              <li class="list-group-item d-flex align-items-center gap-3">
-                <img src="./assets/images/avatar/avatar-4.jpg" class="rounded-circle" width="48" alt="">
-                <div class="flex-grow-1">
-                  <p class="mb-1">Nala</p>
-                  <small class="text-muted">Reporte urgente</small>
-                </div>
-                <span class="badge bg-danger-subtle text-danger">Urgente</span>
-              </li>
             </ul>
           </div>
         </div>
@@ -623,35 +693,7 @@
   <script src="./assets/js/main.js" type="module"></script>
   <script src="./assets/js/dashboard.js" type="module"></script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch('http://localhost:8085/api/bff/dashboard/resumen')
-        .then(response => {
-          if (!response.ok) throw new Error("Error conectando al BFF");
-          return response.json();
-        })
-        .then(datos => {
-          console.log("¡Datos recibidos del servidor!", datos);
-
-          if (document.getElementById('num-reportadas')) {
-            document.getElementById('num-reportadas').innerText = datos.mascotasReportadas;
-          }
-          if (document.getElementById('num-activos')) {
-            document.getElementById('num-activos').innerText = datos.casosActivos;
-          }
-          if (document.getElementById('num-encontradas')) {
-            document.getElementById('num-encontradas').innerText = datos.mascotasEncontradas;
-          }
-          if (document.getElementById('num-urgentes')) {
-            document.getElementById('num-urgentes').innerText = datos.reportesUrgentes;
-          }
-          if (document.getElementById('num-avistamientos')) {
-            document.getElementById('num-avistamientos').innerText = datos.avistamientosRecientes;
-          }
-        })
-        .catch(error => console.error("Houston, tenemos un problema:", error));
-    });
-  </script>
+  
 </body>
 
 </html>
