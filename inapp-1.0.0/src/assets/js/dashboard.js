@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8085/api/bff';
+const API_BASE_URL = window.APP_CONFIG.API_BFF;
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {

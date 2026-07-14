@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8085/api/bff';
+const API_BASE_URL = window.APP_CONFIG.API_BFF;
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
@@ -190,13 +190,22 @@ async function registrarMascotaEnBaseDeDatos(e) {
     console.log("🚀 [Admin] Enviando configuración a MySQL a través del BFF:", nuevaMascotaPayload);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/mascotas/reportar?tipo=perdida`, {
-            method: 'POST',
+        const rol =
+        localStorage.getItem("rol")?.toUpperCase() === "ADMINISTRADOR"
+            ? "ADMIN"
+            : localStorage.getItem("rol")?.toUpperCase() || "ADMIN";
+
+        const response = await fetch(
+        `${API_BASE_URL}/mascotas/crear-admin`,
+        {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+            "Content-Type": "application/json",
+            rol: rol,
             },
-            body: JSON.stringify(nuevaMascotaPayload)
-        });
+            body: JSON.stringify(nuevaMascotaPayload),
+        }
+        );
 
         if (response.ok) {
             alert(`¡Excelente! ${nombreInput} ha sido insertado correctamente con su foto en la base de datos.`);

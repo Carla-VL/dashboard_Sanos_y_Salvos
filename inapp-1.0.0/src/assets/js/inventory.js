@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8085/api/bff';
+const API_BASE_URL = window.APP_CONFIG.API_BFF;
 let modalBootstrap;
 let idMascotaAEliminar = null; // Variable para recordar qué mascota borrar
 let mascotasActuales = []; // 🧠 MEMORIA GLOBAL: Aquí guardaremos la lista completa
