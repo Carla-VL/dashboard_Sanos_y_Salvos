@@ -1,4 +1,8 @@
-const API_BASE_URL = window.APP_CONFIG.API_BFF;
+const API_BASE_URL =
+  window.APP_CONFIG?.API_BFF ||
+  "https://34-193-134-184.sslip.io/api/bff";
+
+console.log("API BFF utilizada:", API_BASE_URL);
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 

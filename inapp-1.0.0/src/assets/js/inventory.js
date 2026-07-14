@@ -1,4 +1,8 @@
-const API_BASE_URL = window.APP_CONFIG.API_BFF;
+const API_BASE_URL =
+  window.APP_CONFIG?.API_BFF ||
+  "https://34-193-134-184.sslip.io/api/bff";
+
+console.log("API BFF utilizada:", API_BASE_URL);
 let modalBootstrap;
 let idMascotaAEliminar = null; // Variable para recordar qué mascota borrar
 let mascotasActuales = []; // 🧠 MEMORIA GLOBAL: Aquí guardaremos la lista completa
