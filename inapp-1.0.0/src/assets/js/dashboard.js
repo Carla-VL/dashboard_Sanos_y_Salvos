@@ -4,18 +4,25 @@ const API_BASE_URL =
 
 console.log("API BFF utilizada:", API_BASE_URL);
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   try {
-    /*
-     * Esperamos que terminen las dos consultas principales.
-     * allSettled permite continuar aunque una de las consultas falle.
-     */
-    await Promise.allSettled([
-      obtenerMetricasDelBff(),
-      obtenerUltimosCasosDelBff(),
+    console.log("API BFF utilizada:", API_BASE_URL);
+
+    const resultados = await Promise.allSettled([
+      cargarResumenDashboard(),
+      cargarUltimosReportes(),
     ]);
+
+    resultados.forEach((resultado, indice) => {
+      if (resultado.status === "rejected") {
+        console.error(
+          `Error en la carga ${indice + 1}:`,
+          resultado.reason
+        );
+      }
+    });
   } catch (error) {
-    console.error('Error durante la carga inicial del dashboard:', error);
+    console.error("Error general cargando el dashboard:", error);
   } finally {
     finalizarCargaDashboard();
   }
